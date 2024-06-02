@@ -1,14 +1,11 @@
 'use client'
 
-import { ReactFlowProvider } from 'reactflow'
-import App from './App'
+import FlowApp from './flow-app'
 
 export default function Index() {
   return (
-    <div className='h-full w-full p-4'>
-      <ReactFlowProvider>
-        <App />
-      </ReactFlowProvider>
+    <div className='h-full w-full'>
+      <FlowApp />
     </div>
   )
 }

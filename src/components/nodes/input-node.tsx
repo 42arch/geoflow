@@ -1,22 +1,51 @@
-import { useCallback } from 'react'
-import { Handle, NodeProps, Position } from 'reactflow'
+import { ChangeEventHandler } from 'react'
+import {
+  Handle,
+  NodeProps,
+  Position,
+  useNodes,
+  useReactFlow,
+  useStore
+} from 'reactflow'
 
 type NodeData = {
-  value: number
+  value: string
 }
 
-export default function InputNode({ data }: NodeProps<NodeData>) {
-  const onChange = useCallback((evt) => {
-    console.log(evt.target.value)
-  }, [])
+export default function InputNode({ id, data }: NodeProps<NodeData>) {
+  const { setNodes } = useReactFlow()
+
+  const onChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+    setNodes((nds) =>
+      nds.map((n) => {
+        if (n.id === id) {
+          return {
+            ...n,
+            data: {
+              ...data,
+              value: e.target.value
+            }
+          }
+        }
+        return n
+      })
+    )
+  }
 
   return (
     <>
       <div>
-        <label htmlFor='text'>Text:</label>
-        <input id='text' name='text' onChange={onChange} className='nodrag' />
+        <label htmlFor='text'>Input:</label>
+        <input
+          id='text'
+          name='text'
+          type='number'
+          // defaultValue={}
+          onChange={onChange}
+          className='nodrag border-2 border-slate-400'
+        />
       </div>
-      <Handle type='source' position={Position.Right} id='a' />
+      <Handle type='source' position={Position.Bottom} id='a' />
     </>
   )
 }
