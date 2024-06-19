@@ -1,48 +1,64 @@
+import useSourceTarget from '@/hooks/useSourceTarget'
+import { useFlowStore } from '@/store'
 import { ChangeEventHandler } from 'react'
 import {
   Handle,
+  Node,
   NodeProps,
   Position,
+  getOutgoers,
+  useEdges,
   useNodes,
-  useReactFlow,
-  useStore
+  useReactFlow
 } from 'reactflow'
 
 type NodeData = {
-  value: string
+  output: any
 }
 
-export default function InputNode({ id, data }: NodeProps<NodeData>) {
-  const { setNodes } = useReactFlow()
+export default function InputNode(props: Node<NodeData>) {
+  const { updateNode } = useFlowStore()
+  const { sources, targets } = useSourceTarget(props)
+  console.log(89999999, sources, targets)
 
   const onChange: ChangeEventHandler<HTMLInputElement> = (e) => {
-    setNodes((nds) =>
-      nds.map((n) => {
-        if (n.id === id) {
-          return {
-            ...n,
-            data: {
-              ...data,
-              value: e.target.value
-            }
-          }
-        }
-        return n
-      })
-    )
+    const value = e.target.value
+
+    // setNodes((nds) =>
+    //   nds.map((n) => {
+    //     if (n.id === props.id) {
+    //       return {
+    //         ...n,
+    //         data: {
+    //           ...props.data,
+    //           output: e.target.value
+    //         }
+    //       }
+    //     }
+    //     if (targets.find((o) => o.id === n.id)) {
+    //       return {
+    //         ...n,
+    //         data: {
+    //           ...n.data,
+    //           input: e.target.value
+    //         }
+    //       }
+    //     }
+
+    //     return n
+    //   })
+    // )
   }
 
   return (
     <>
       <div>
-        <label htmlFor='text'>Input:</label>
+        <p>Input Node</p>
         <input
-          id='text'
-          name='text'
           type='number'
-          // defaultValue={}
+          className='border-2 border-slate-400'
+          id='b'
           onChange={onChange}
-          className='nodrag border-2 border-slate-400'
         />
       </div>
       <Handle type='source' position={Position.Bottom} id='a' />

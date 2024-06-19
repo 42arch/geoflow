@@ -1,54 +1,24 @@
-import FuncNode from '@/components/nodes/func-node'
 import HandleNode from '@/components/nodes/handle-node'
 import InputNode from '@/components/nodes/input-node'
 import { DragEventHandler, useCallback, useState } from 'react'
-import ReactFlow, {
-  addEdge,
-  applyEdgeChanges,
-  applyNodeChanges,
-  Node,
-  Edge,
-  OnNodesChange,
-  OnEdgesChange,
-  OnConnect,
-  Background,
-  Controls,
-  ReactFlowInstance
-} from 'reactflow'
+import ReactFlow, { Background, Controls, ReactFlowInstance } from 'reactflow'
+import OutputNode from '@/components/nodes/output-node'
+import { useFlowStore } from '@/store'
 import 'reactflow/dist/style.css'
-
-const initialNodes: Node[] = []
-
-const initialEdges: Edge[] = []
-
-let id = 0
-const getId = () => `dndnode_${id++}`
+import { nanoid } from 'nanoid'
 
 const nodeTypes = {
   input: InputNode,
-  handle: HandleNode
+  handle: HandleNode,
+  output: OutputNode
 }
 
 export default function Flow() {
   const [reactFlowInstance, setReactFlowInstance] =
     useState<ReactFlowInstance | null>(null)
-  const [nodes, setNodes] = useState<Node[]>(initialNodes)
-  const [edges, setEdges] = useState<Edge[]>(initialEdges)
 
-  const onNodesChange: OnNodesChange = useCallback(
-    (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
-    [setNodes]
-  )
-
-  const onEdgesChange: OnEdgesChange = useCallback(
-    (changes) => setEdges((eds) => applyEdgeChanges(changes, eds)),
-    [setEdges]
-  )
-
-  const onConnect: OnConnect = useCallback(
-    (connection) => setEdges((eds) => addEdge(connection, eds)),
-    [setEdges]
-  )
+  const { nodes, edges, addNode, onConnect, onNodesChange, onEdgesChange } =
+    useFlowStore()
 
   const onDragOver: DragEventHandler<HTMLDivElement> = useCallback((event) => {
     event.preventDefault()
@@ -59,7 +29,6 @@ export default function Flow() {
     (event) => {
       event.preventDefault()
       const type = event.dataTransfer.getData('application/reactflow')
-
       if (typeof type === 'undefined' || !type) {
         return
       }
@@ -70,15 +39,14 @@ export default function Flow() {
       })
       if (!position) return
       const newNode = {
-        id: getId(),
+        id: nanoid(),
         type,
         position,
         data: { label: `${type} node` }
       }
-
-      setNodes((nds) => nds.concat(newNode))
+      addNode(newNode)
     },
-    [reactFlowInstance]
+    [addNode, reactFlowInstance]
   )
 
   return (

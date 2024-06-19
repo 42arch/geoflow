@@ -1,4 +1,11 @@
-import { ReactFlowProvider, useEdges, useNodes, useStoreApi } from 'reactflow'
+import {
+  Edge,
+  Node,
+  ReactFlowProvider,
+  useEdges,
+  useNodes,
+  useStoreApi
+} from 'reactflow'
 import {
   ResizableHandle,
   ResizablePanel,
@@ -7,6 +14,8 @@ import {
 import { Button } from '@/components/ui/button'
 import Flow from './flow'
 import Aside from './aside'
+import { useState } from 'react'
+import { runProcess } from '@/lib/run'
 
 function FlowApp() {
   const store = useStoreApi()
@@ -15,6 +24,8 @@ function FlowApp() {
 
   const run = () => {
     console.log('Running', nodes, edges)
+    const result = runProcess(nodes, edges)
+
     // const { nodeInternals, edges, nodes } = store.getState()
     // console.log('Running', nodeInternals.values())
   }
