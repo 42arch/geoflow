@@ -24,6 +24,15 @@ export default function InputNode(props: Node<NodeData>) {
   const onChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     const value = e.target.value
 
+    const currentNode: Node<NodeData> = {
+      ...props,
+      data: {
+        output: value
+      }
+    }
+
+    updateNode(currentNode)
+
     // setNodes((nds) =>
     //   nds.map((n) => {
     //     if (n.id === props.id) {

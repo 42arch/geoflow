@@ -6,7 +6,8 @@ import {
   OnNodesChange,
   addEdge,
   applyEdgeChanges,
-  applyNodeChanges
+  applyNodeChanges,
+  getOutgoers
 } from 'reactflow'
 import { StateCreator } from 'zustand'
 
@@ -50,9 +51,34 @@ export const createFlowSlice: StateCreator<FlowSlice, [], [], FlowSlice> = (
     })
   },
   updateNode: (node) => {
-    const oldNodes = get().nodes.filter((n) => n.id != node.id)
+    const oldNodes = get().nodes
+    const edges = get().edges
+    const targets = getOutgoers(node, oldNodes, edges)
+
+    const newNodes = oldNodes.map((n) => {
+      if (n.id === node.id) {
+        return {
+          ...n,
+          data: {
+            ...node.data
+          }
+        }
+      }
+      if (targets.find((o) => o.id === n.id)) {
+        return {
+          ...n,
+          data: {
+            ...n.data,
+            input: node.data.output
+          }
+        }
+      }
+
+      return n
+    })
+
     set({
-      nodes: [...oldNodes, node]
+      nodes: newNodes
     })
   },
   setNodes: (nodes: Node[]) => set({ nodes }),
