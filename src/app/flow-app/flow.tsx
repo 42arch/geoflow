@@ -1,24 +1,35 @@
-import HandleNode from '@/components/nodes/handle-node'
-import InputNode from '@/components/nodes/input-node'
 import { DragEventHandler, useCallback, useState } from 'react'
-import ReactFlow, { Background, Controls, ReactFlowInstance } from 'reactflow'
-import OutputNode from '@/components/nodes/output-node'
-import { useFlowStore } from '@/store'
-import 'reactflow/dist/style.css'
+import {
+  ReactFlow,
+  Background,
+  Controls,
+  ReactFlowInstance,
+  useNodesState,
+  useEdgesState,
+  Connection,
+  addEdge,
+  Node,
+  Edge
+} from '@xyflow/react'
 import { nanoid } from 'nanoid'
+import '@xyflow/react/dist/style.css'
+import CustomNode from '@/components/flow/node/Node'
 
 const nodeTypes = {
-  input: InputNode,
-  handle: HandleNode,
-  output: OutputNode
+  custom: CustomNode
 }
 
 export default function Flow() {
   const [reactFlowInstance, setReactFlowInstance] =
     useState<ReactFlowInstance | null>(null)
 
-  const { nodes, edges, addNode, onConnect, onNodesChange, onEdgesChange } =
-    useFlowStore()
+  const [nodes, setNodes, onNodesChange] = useNodesState<Node>([])
+  const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([])
+
+  const onConnect = useCallback(
+    (connection: Connection) => setEdges((eds) => addEdge(connection, eds)),
+    [setEdges]
+  )
 
   const onDragOver: DragEventHandler<HTMLDivElement> = useCallback((event) => {
     event.preventDefault()
@@ -28,8 +39,8 @@ export default function Flow() {
   const onDrop: DragEventHandler<HTMLDivElement> = useCallback(
     (event) => {
       event.preventDefault()
-      const type = event.dataTransfer.getData('application/reactflow')
-      if (typeof type === 'undefined' || !type) {
+      const nodeDataString = event.dataTransfer.getData('application/reactflow')
+      if (typeof nodeDataString === 'undefined' || !nodeDataString) {
         return
       }
 
@@ -40,13 +51,14 @@ export default function Flow() {
       if (!position) return
       const newNode = {
         id: nanoid(),
-        type,
+        type: 'custom',
         position,
-        data: { label: `${type} node` }
+        data: JSON.parse(nodeDataString)
       }
-      addNode(newNode)
+      setNodes((nds) => [...nds, newNode])
+      // addNode(newNode)
     },
-    [addNode, reactFlowInstance]
+    [reactFlowInstance]
   )
 
   return (

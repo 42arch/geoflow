@@ -1,33 +1,29 @@
 import { DragEvent } from 'react'
-
-const nodes: { label: string }[] = [
-  {
-    label: 'input'
-  },
-  {
-    label: 'handle'
-  },
-  {
-    label: 'output'
-  }
-]
+import NodeList from './NodeList'
+import { NodeData, NodeState } from '@/helpers/types'
 
 export default function Aside() {
-  const onDragStart = (event: DragEvent<HTMLDivElement>, nodeType: string) => {
-    event.dataTransfer.setData('application/reactflow', nodeType)
+  const onDragStart = (event: DragEvent<HTMLDivElement>, node: NodeState) => {
+    const nodeData: NodeData = {
+      schemaId: node.schemaId
+    }
+    event.dataTransfer.setData(
+      'application/reactflow',
+      JSON.stringify(nodeData)
+    )
     event.dataTransfer.effectAllowed = 'move'
   }
 
   return (
     <div className='flex w-full flex-wrap items-start justify-around gap-4 p-2 '>
-      {nodes.map((n) => (
+      {NodeList.map((n) => (
         <div
-          key={n.label}
+          key={n.name}
           draggable
-          onDragStart={(event) => onDragStart(event, n.label)}
+          onDragStart={(event) => onDragStart(event, n)}
           className='flex h-12 w-12 items-center justify-center rounded-md bg-slate-200 text-xs'
         >
-          {n.label}
+          {n.name}
         </div>
       ))}
     </div>

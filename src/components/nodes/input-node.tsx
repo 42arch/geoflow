@@ -1,76 +1,35 @@
-import useSourceTarget from '@/hooks/useSourceTarget'
-import { useFlowStore } from '@/store'
-import { ChangeEventHandler } from 'react'
-import {
-  Handle,
-  Node,
-  NodeProps,
-  Position,
-  getOutgoers,
-  useEdges,
-  useNodes,
-  useReactFlow
-} from 'reactflow'
+import { memo, useState } from 'react'
+import { Position, NodeProps, Handle, useReactFlow } from '@xyflow/react'
 
-type NodeData = {
-  output: any
-}
-
-export default function InputNode(props: Node<NodeData>) {
-  const { updateNode } = useFlowStore()
-  const { sources, targets } = useSourceTarget(props)
-  console.log(89999999, sources, targets)
-
-  const onChange: ChangeEventHandler<HTMLInputElement> = (e) => {
-    const value = e.target.value
-
-    const currentNode: Node<NodeData> = {
-      ...props,
-      data: {
-        output: value
-      }
-    }
-
-    updateNode(currentNode)
-
-    // setNodes((nds) =>
-    //   nds.map((n) => {
-    //     if (n.id === props.id) {
-    //       return {
-    //         ...n,
-    //         data: {
-    //           ...props.data,
-    //           output: e.target.value
-    //         }
-    //       }
-    //     }
-    //     if (targets.find((o) => o.id === n.id)) {
-    //       return {
-    //         ...n,
-    //         data: {
-    //           ...n.data,
-    //           input: e.target.value
-    //         }
-    //       }
-    //     }
-
-    //     return n
-    //   })
-    // )
+function InputNode({ id, data }: NodeProps) {
+  const { updateNodeData } = useReactFlow()
+  const [text, setText] = useState(data.text as string)
+  const updateText = (text: string) => {
+    // avoid jumping caret with a synchronous update
+    setText(text)
+    // update actual node data
+    updateNodeData(id, { text })
   }
 
   return (
-    <>
+    <div
+      style={{
+        background: '#eee',
+        color: '#222',
+        padding: 10,
+        fontSize: 12,
+        borderRadius: 10
+      }}
+    >
       <div>
-        <p>Input Node</p>
         <input
-          type='number'
-          className='border-2 border-slate-400'
-          id='b'
-          onChange={onChange}
+          onChange={(event) => updateText(event.target.value)}
+          value={text || ''}
         />
       </div>
-      <Handle type='source' position={Position.Bottom} id='a' />
-    </>
+      <Handle type='source' position={Position.Right} />
+    </div>
   )
 }
+
+export default memo(InputNode)

@@ -1,22 +1,38 @@
-import { Handle, NodeProps, Position, useReactFlow } from 'reactflow'
+import { memo } from 'react'
+import {
+  Handle,
+  Position,
+  useHandleConnections,
+  useNodesData
+} from '@xyflow/react'
 
-type NodeData = {
-  input: any
-  output: any
-}
-
-export default function OutputNode(props: NodeProps<NodeData>) {
-  const { setNodes } = useReactFlow()
+function OutputNode() {
+  const connections = useHandleConnections({
+    type: 'target'
+  })
+  const nodesData = useNodesData(
+    connections.map((connection) => connection.source)
+  )
 
   return (
-    <>
-      <Handle type='target' position={Position.Top} id='a' />
-      <div className=''>
-        <p>Output Node</p>
-        <div>{props?.data.input}</div>
+    <div
+      style={{
+        background: '#eee',
+        color: '#222',
+        padding: 10,
+        fontSize: 12,
+        borderRadius: 10
+      }}
+    >
+      <Handle type='target' position={Position.Left} />
+      <div>
+        incoming texts:{' '}
+        {nodesData
+          ?.filter((nodeData) => nodeData.data.text !== undefined)
+          .map(({ data }, i) => <div key={i}>{data.text}</div>) || 'none'}
       </div>
-
-      <Handle type='source' position={Position.Bottom} id='b' />
-    </>
+    </div>
   )
 }
+
+export default memo(OutputNode)
