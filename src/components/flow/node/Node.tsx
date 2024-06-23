@@ -17,7 +17,7 @@ function CustomNode({ id, data }: NodeProps) {
   return (
     <NodeContainer>
       <NodeHeader nodeState={nodeState} />
-      <NodeBody />
+      <NodeBody nodeState={nodeState} />
     </NodeContainer>
   )
 }

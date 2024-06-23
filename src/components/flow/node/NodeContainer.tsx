@@ -5,7 +5,9 @@ interface Props {
 }
 
 function NodeContainer({ children }: Props) {
-  return <div>{children}</div>
+  return (
+    <div className='rounded-md border-2 border-zinc-500 px-4'>{children}</div>
+  )
 }
 
 export default NodeContainer
