@@ -1,5 +1,6 @@
 import { NodeState } from '@/helpers/types'
 import { InputMap } from './inputs'
+import InputContainer from './inputs/InputContainer'
 
 interface Props {
   nodeState: NodeState
@@ -11,11 +12,10 @@ function NodeBody({ nodeState }: Props) {
   console.log(inputs)
 
   return (
-    <div>
-      {inputs.map((input) => {
-        const InputElement = InputMap[input.type]
-        return <div>{<InputElement />}</div>
-      })}
+    <div className='px-2'>
+      {inputs.map((input, idx) => (
+        <InputContainer key={idx} input={input} />
+      ))}
     </div>
   )
 }

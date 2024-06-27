@@ -1,12 +1,12 @@
-import { ReactNode } from 'react'
+import { PropsWithChildren } from 'react'
 
-interface Props {
-  children: ReactNode
-}
+interface Props {}
 
-function NodeContainer({ children }: Props) {
+function NodeContainer({ children }: PropsWithChildren<Props>) {
   return (
-    <div className='rounded-md border-2 border-zinc-500 px-4'>{children}</div>
+    <div className='rounded-md border-2 border-zinc-500 bg-white'>
+      {children}
+    </div>
   )
 }
 

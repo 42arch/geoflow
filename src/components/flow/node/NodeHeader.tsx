@@ -8,7 +8,7 @@ function NodeHeader({ nodeState }: Props) {
   const { name } = nodeState
 
   return (
-    <div className='text-sm'>
+    <div className='flex h-[32px] items-center justify-center px-2 text-sm font-bold'>
       <span>{name}</span>
     </div>
   )

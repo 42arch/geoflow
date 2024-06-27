@@ -14,6 +14,7 @@ import {
 import { nanoid } from 'nanoid'
 import '@xyflow/react/dist/style.css'
 import CustomNode from '@/components/flow/node/Node'
+import './flow.css'
 
 const nodeTypes = {
   custom: CustomNode
