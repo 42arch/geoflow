@@ -14,16 +14,20 @@ const NodeList: NodeState[] = [
         label: '数字',
         description: '输入数字',
         optional: false,
-        hasHandle: true
+        hasHandle: false
       }
     ],
     outputs: [
       {
-        type: 'Number',
+        id: 0,
+        kind: 'number',
         value: 0,
         hasHandle: true
       }
-    ]
+    ],
+    function: (inputs: number) => {
+      return inputs
+    }
   },
   {
     name: 'Color',
@@ -65,11 +69,15 @@ const NodeList: NodeState[] = [
     ],
     outputs: [
       {
-        type: 'Number',
-        value: 0,
+        id: 0,
+        kind: 'color',
+        value: undefined,
         hasHandle: true
       }
-    ]
+    ],
+    function: (inputs: [number, number, number]) => {
+      return `rgb(${(inputs[0], inputs[1], inputs[2])})`
+    }
   }
 ]
 

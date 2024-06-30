@@ -4,13 +4,10 @@ import { NodeData, NodeState } from '@/helpers/types'
 
 export default function Aside() {
   const onDragStart = (event: DragEvent<HTMLDivElement>, node: NodeState) => {
-    const nodeData: NodeData = {
-      schemaId: node.schemaId
-    }
-    event.dataTransfer.setData(
-      'application/reactflow',
-      JSON.stringify(nodeData)
-    )
+    // const nodeData: NodeData = {
+    //   schemaId: node.schemaId
+    // }
+    event.dataTransfer.setData('application/reactflow', node.schemaId)
     event.dataTransfer.effectAllowed = 'move'
   }
 

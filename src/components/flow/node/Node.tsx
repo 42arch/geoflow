@@ -2,22 +2,24 @@ import NodeContainer from './NodeContainer'
 import NodeHeader from './NodeHeader'
 import NodeBody from './NodeBody'
 import useNodeStateFromData from '@/hooks/useNodeStateFromData'
-import { NodeData } from '@/helpers/types'
+import { NodeData, NodeState } from '@/helpers/types'
 
 export interface NodeProps {
-  data: NodeData
+  data: NodeState
   id: string
 }
 
 function CustomNode({ id, data }: NodeProps) {
-  const nodeState = useNodeStateFromData(data)
+  console.log('data', data)
+
+  const nodeState = data
 
   if (nodeState === undefined) return
 
   return (
     <NodeContainer>
       <NodeHeader nodeState={nodeState} />
-      <NodeBody nodeState={nodeState} />
+      <NodeBody nodeState={nodeState} nodeId={id} />
     </NodeContainer>
   )
 }

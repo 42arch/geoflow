@@ -2,8 +2,9 @@ export type NodeState = {
   name: string
   schemaId: string
   // isAutomatic: boolean
+  function: (args: any) => any
   inputs: Input[]
-  outputs: { type: InputValueType; value: any; hasHandle: boolean }[]
+  outputs: Output[]
 }
 
 export interface NodeData {
@@ -22,6 +23,14 @@ export type Metadata = {
 
 export type Input = NumberInput | ColorInput
 type InputKind = Input['kind']
+
+export interface Output {
+  readonly id: number
+  readonly kind: InputKind
+  readonly hasHandle: boolean
+  value: any
+}
+
 interface InputBase {
   readonly id: number
   readonly kind: InputKind

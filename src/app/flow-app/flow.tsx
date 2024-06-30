@@ -15,6 +15,8 @@ import { nanoid } from 'nanoid'
 import '@xyflow/react/dist/style.css'
 import CustomNode from '@/components/flow/node/Node'
 import './flow.css'
+import useNodeStateFromData from '@/hooks/useNodeStateFromData'
+import getNodeDataFromSchemaId from '@/hooks/getNodeDataFromSchemaId'
 
 const nodeTypes = {
   custom: CustomNode
@@ -40,8 +42,8 @@ export default function Flow() {
   const onDrop: DragEventHandler<HTMLDivElement> = useCallback(
     (event) => {
       event.preventDefault()
-      const nodeDataString = event.dataTransfer.getData('application/reactflow')
-      if (typeof nodeDataString === 'undefined' || !nodeDataString) {
+      const schemaId = event.dataTransfer.getData('application/reactflow')
+      if (typeof schemaId === 'undefined' || !schemaId) {
         return
       }
 
@@ -50,11 +52,14 @@ export default function Flow() {
         y: event.clientY
       })
       if (!position) return
+
+      const nodeData = getNodeDataFromSchemaId(schemaId)!
+
       const newNode = {
         id: nanoid(),
         type: 'custom',
         position,
-        data: JSON.parse(nodeDataString)
+        data: nodeData
       }
       setNodes((nds) => [...nds, newNode])
       // addNode(newNode)

@@ -1,7 +1,13 @@
-import { Input } from '@/helpers/types'
-import { PropsWithChildren } from 'react'
+import { Input, Output } from '@/helpers/types'
+import { PropsWithChildren, useEffect, useState } from 'react'
 import { InputMap } from '.'
-import { Handle, Position } from '@xyflow/react'
+import {
+  Handle,
+  Position,
+  useHandleConnections,
+  useNodesData,
+  useReactFlow
+} from '@xyflow/react'
 
 interface InputHandleProps {
   index: number
@@ -14,7 +20,7 @@ function InputHandle({ index, children }: PropsWithChildren<InputHandleProps>) {
     <>
       <Handle
         isConnectable
-        type='source'
+        type='target'
         key={index}
         id={`input-${index}`}
         position={Position.Left}
@@ -30,17 +36,44 @@ function InputHandle({ index, children }: PropsWithChildren<InputHandleProps>) {
 }
 
 interface InputContainerProps {
+  nodeId: string
   input: Input
+  onValueChange: (value: any) => void
 }
 
 function InputContainer({
+  nodeId,
   input,
+  onValueChange,
   children
 }: PropsWithChildren<InputContainerProps>) {
   {
-    const { label, hasHandle, id } = input
+    const { label, hasHandle, id, default: defaultValue } = input
     const InputElement = InputMap[input.kind]
-    let inputElement = <InputElement />
+
+    const [value, setValue] = useState(defaultValue)
+
+    const connections = useHandleConnections({
+      type: 'target',
+      id: `input-${id}`
+    })
+    const nodeData = useNodesData(connections[0]?.source)
+    console.log(`input-${id}`, connections, nodeData)
+
+    useEffect(() => {
+      setValue(nodeData?.data?.outputs[0].value)
+    }, [nodeData])
+
+    let inputElement = (
+      <InputElement
+        value={value}
+        onChange={(v) => {
+          console.log('change', v)
+          setValue(v)
+          onValueChange(v)
+        }}
+      />
+    )
 
     if (hasHandle) {
       inputElement = <InputHandle index={id}>{inputElement}</InputHandle>
