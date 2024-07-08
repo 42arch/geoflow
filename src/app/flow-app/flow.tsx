@@ -15,7 +15,6 @@ import { nanoid } from 'nanoid'
 import '@xyflow/react/dist/style.css'
 import CustomNode from '@/components/flow/node/Node'
 import './flow.css'
-import useNodeStateFromData from '@/hooks/useNodeStateFromData'
 import getNodeDataFromSchemaId from '@/hooks/getNodeDataFromSchemaId'
 
 const nodeTypes = {

@@ -58,7 +58,6 @@ function InputContainer({
       id: `input-${id}`
     })
     const nodeData = useNodesData(connections[0]?.source)
-    console.log(`input-${id}`, connections, nodeData)
 
     useEffect(() => {
       setValue(nodeData?.data?.outputs[0].value)

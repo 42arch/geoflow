@@ -2,6 +2,8 @@ import { NodeState } from '@/helpers/types'
 import InputContainer from './inputs/InputContainer'
 import OutputContainer from './OutputContainer'
 import { useReactFlow } from '@xyflow/react'
+import { useEffect, useState } from 'react'
+import DisplayContainer from './DisplayContainer'
 
 interface Props {
   nodeId: string
@@ -9,7 +11,17 @@ interface Props {
 }
 
 function NodeBody({ nodeId, nodeState }: Props) {
-  const { outputs, inputs } = nodeState
+  const { outputs, inputs, hasEffect, func } = nodeState
+
+  const [inputValues, setInputValues] = useState<any[]>([])
+
+  const [displayValue, setDisplayValue] = useState<any>()
+
+  useEffect(() => {
+    if (hasEffect) {
+      setDisplayValue('x')
+    }
+  }, [hasEffect])
 
   const { updateNodeData } = useReactFlow()
 
@@ -21,16 +33,25 @@ function NodeBody({ nodeId, nodeState }: Props) {
           nodeId={nodeId}
           input={input}
           onValueChange={(v) => {
+            const newValues = [...inputValues]
+            newValues[idx] = v
+            setInputValues(newValues)
+
+            const outputValues = func ? func(newValues[0]) : newValues[0]
+
             const newOutputs = outputs.map((output, idx) => ({
               ...output,
-              value: v
+              value: outputValues
             }))
             updateNodeData(nodeId, {
+              // input: newInputs,
               outputs: newOutputs
             })
           }}
         />
       ))}
+
+      {hasEffect && <DisplayContainer value={displayValue} />}
 
       <div className=''>
         {outputs.map((output, idx) => (

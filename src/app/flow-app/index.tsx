@@ -12,6 +12,9 @@ function FlowApp() {
   const store = useStoreApi()
 
   const run = () => {
+    const nodes = store.getState().nodes
+    const edges = store.getState().edges
+
     console.log('Running', store.getState().nodes, store.getState().edges)
   }
 

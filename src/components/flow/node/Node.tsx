@@ -1,7 +1,6 @@
 import NodeContainer from './NodeContainer'
 import NodeHeader from './NodeHeader'
 import NodeBody from './NodeBody'
-import useNodeStateFromData from '@/hooks/useNodeStateFromData'
 import { NodeData, NodeState } from '@/helpers/types'
 
 export interface NodeProps {

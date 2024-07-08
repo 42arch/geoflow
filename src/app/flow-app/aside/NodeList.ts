@@ -25,8 +25,8 @@ const NodeList: NodeState[] = [
         hasHandle: true
       }
     ],
-    function: (inputs: number) => {
-      return inputs
+    func: (inputs: number) => {
+      return inputs + 2
     }
   },
   {
@@ -75,9 +75,32 @@ const NodeList: NodeState[] = [
         hasHandle: true
       }
     ],
-    function: (inputs: [number, number, number]) => {
+    func: (inputs: [number, number, number]) => {
       return `rgb(${(inputs[0], inputs[1], inputs[2])})`
     }
+  },
+  {
+    name: 'Display',
+    schemaId: 'display',
+    hasEffect: true,
+    inputs: [
+      {
+        kind: 'data',
+        id: 0,
+        label: '',
+        description: '显示数据',
+        optional: false,
+        hasHandle: true
+      }
+    ],
+    outputs: [
+      {
+        kind: 'Display',
+        id: 0,
+        hasHandle: false,
+        value: undefined
+      }
+    ]
   }
 ]
 
