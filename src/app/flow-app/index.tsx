@@ -18,7 +18,7 @@ function FlowApp() {
 
     const paths = findAllPathsFromSourcesToTargets(nodes, edges)
 
-    console.log('Running', paths)
+    console.log('Running', edges, paths)
   }
 
   return (

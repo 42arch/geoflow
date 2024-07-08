@@ -34,13 +34,13 @@ export const findAllPathsFromSourcesToTargets = (
     .filter((node) => outDegree[node.id] === 0)
     .map((node) => node.id)
 
-  const paths: string[][] = []
+  const paths: Set<string> = new Set()
   const visited: Set<string> = new Set()
 
   const dfs = (currentNode: string, path: string[]) => {
     path.push(currentNode)
     if (!adjList[currentNode] || adjList[currentNode].length === 0) {
-      paths.push([...path])
+      paths.add(path.join(' -> '))
     } else {
       visited.add(currentNode)
       for (const neighbor of adjList[currentNode]) {
@@ -62,5 +62,5 @@ export const findAllPathsFromSourcesToTargets = (
     })
   })
 
-  return paths
+  return Array.from(paths).map((path) => path.split(' -> '))
 }
