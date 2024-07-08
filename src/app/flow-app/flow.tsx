@@ -55,7 +55,8 @@ export default function Flow() {
       const nodeData = getNodeDataFromSchemaId(schemaId)!
 
       const newNode = {
-        id: nanoid(),
+        // id: nanoid(),
+        id: nodeData.name,
         type: 'custom',
         position,
         data: nodeData

@@ -1,6 +1,6 @@
 import localFont from 'next/font/local'
 
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/classNames'
 import './globals.css'
 
 export const fontInter = localFont({

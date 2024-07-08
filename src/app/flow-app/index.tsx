@@ -7,6 +7,7 @@ import {
 import { Button } from '@/components/ui/button'
 import Flow from './flow'
 import Aside from './aside'
+import { findAllPathsFromSourcesToTargets } from '@/lib/findAllPaths'
 
 function FlowApp() {
   const store = useStoreApi()
@@ -15,7 +16,9 @@ function FlowApp() {
     const nodes = store.getState().nodes
     const edges = store.getState().edges
 
-    console.log('Running', store.getState().nodes, store.getState().edges)
+    const paths = findAllPathsFromSourcesToTargets(nodes, edges)
+
+    console.log('Running', paths)
   }
 
   return (
