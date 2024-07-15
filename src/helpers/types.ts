@@ -1,11 +1,16 @@
+export type NodeType = {
+  name: string
+  type: string
+}
+
 export type NodeState = {
   name: string
-  schemaId: string
-  hasEffect?: boolean
+  // schemaId: string
+  // hasEffect?: boolean
   // isAutomatic: boolean
-  func?: (args: any) => any
-  inputs: Input[]
-  outputs: Output[]
+  // func?: (args: any) => any
+  // inputs: Input[]
+  // outputs: Output[]
 }
 
 export interface NodeData {

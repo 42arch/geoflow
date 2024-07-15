@@ -1,10 +1,11 @@
 'use client'
 
+import { Button } from '@nextui-org/react'
 import FlowApp from './flow-app'
 
-export default function Index() {
+export default function Page() {
   return (
-    <div className='h-full w-full'>
+    <div className='w-screen h-screen'>
       <FlowApp />
     </div>
   )

@@ -1,52 +1,24 @@
-import { ReactFlowProvider, useStoreApi } from '@xyflow/react'
-import {
-  ResizableHandle,
-  ResizablePanel,
-  ResizablePanelGroup
-} from '@/components/ui/resizable'
-import { Button } from '@/components/ui/button'
-import Flow from './flow'
-import Aside from './aside'
-import { findAllPathsFromSourcesToTargets } from '@/lib/findAllPaths'
+import Editor from '@/components/editor'
+import Header from '@/components/header'
+import Sider from '@/components/sider'
+import React from 'react'
 
 function FlowApp() {
-  const store = useStoreApi()
-
-  const run = () => {
-    const nodes = store.getState().nodes
-    const edges = store.getState().edges
-
-    const paths = findAllPathsFromSourcesToTargets(nodes, edges)
-
-    console.log('Running', edges, paths)
-  }
-
   return (
-    <>
-      <div className='flex h-12 items-center justify-end'>
-        <Button onClick={run}>RUN</Button>
+    <div className='h-full w-full '>
+      <div className='h-[4rem]'>
+        <Header />
       </div>
-      <div className='h-[calc(100%-48px)]'>
-        <ResizablePanelGroup direction='horizontal' className='h-full w-full'>
-          <ResizablePanel defaultSize={20} maxSize={20} minSize={10}>
-            <Aside />
-          </ResizablePanel>
-          <ResizableHandle withHandle />
-          <ResizablePanel defaultSize={80}>
-            <Flow />
-          </ResizablePanel>
-        </ResizablePanelGroup>
+      <div className='flex h-[calc(100%-4rem)]'>
+        <div className='w-[16rem]'>
+          <Sider />
+        </div>
+        <div className='w-[calc(100%-16rem)]'>
+          <Editor />
+        </div>
       </div>
-    </>
-  )
-}
-
-export default function FlowAppWithProvider() {
-  return (
-    <div className='h-full w-full p-4'>
-      <ReactFlowProvider>
-        <FlowApp />
-      </ReactFlowProvider>
     </div>
   )
 }
+
+export default FlowApp
