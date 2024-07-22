@@ -11,6 +11,13 @@ import {
 import type { Node, Edge, Connection, ReactFlowInstance } from '@xyflow/react'
 import { nanoid } from 'nanoid'
 import '@xyflow/react/dist/style.css'
+import './style.css'
+import BaseNode from './nodes/BaseNode'
+import { createNodeData } from '@/utils/node-utils'
+
+const nodeTypes = {
+  default: BaseNode
+}
 
 function Editor() {
   const [reactFlowInstance, setReactFlowInstance] =
@@ -32,7 +39,7 @@ function Editor() {
   const onDrop: DragEventHandler<HTMLDivElement> = useCallback(
     (event) => {
       event.preventDefault()
-      const nodeType = event.dataTransfer.getData('application/reactflow')
+      const schemaId = event.dataTransfer.getData('application/reactflow')
 
       const position = reactFlowInstance?.screenToFlowPosition({
         x: event.clientX,
@@ -41,11 +48,11 @@ function Editor() {
       if (!position) return
 
       const newNode = {
-        id: `${nodeType}-${nanoid()}`,
+        id: `${schemaId}-${nanoid()}`,
         // id: nodeData.name,
         type: 'default',
         position,
-        data: { label: `${nodeType} node` }
+        data: createNodeData(schemaId)
       }
       setNodes((nds) => [...nds, newNode])
     },
@@ -55,6 +62,7 @@ function Editor() {
   return (
     <ReactFlow
       className='p-2'
+      nodeTypes={nodeTypes}
       // nodeTypes={{}}
       nodes={nodes}
       edges={edges}
