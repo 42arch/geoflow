@@ -37,11 +37,11 @@ export type Metadata = {
 }
 
 // export type Input = NumberInput | ColorInput | DataInput
-export type Input = NumberInput
+export type Input = NumberInput | SelectInput
 
 export type InputKind = Input['kind']
 
-export type Output = NumberOutput
+export type Output = GenericOutput
 
 export type OutputKind = Output['kind']
 
@@ -56,6 +56,7 @@ interface InputBase {
   readonly kind: InputKind
   readonly label: string
   readonly hasHandle: boolean
+  disabled?: boolean
   // readonly description: string
   // readonly optional: boolean
   // defaultValue?: any
@@ -63,15 +64,26 @@ interface InputBase {
 
 export interface NumberInput extends InputBase {
   readonly kind: 'number'
-  readonly defaultValue: number
+  readonly value: number
   readonly min?: number | null
   readonly max?: number | null
   readonly precision: number
   readonly step: number
 }
 
-export interface NumberOutput extends OutputBase {
-  readonly kind: 'number'
+export interface SelectOption {
+  value: string
+  label: string
+}
+
+export interface SelectInput extends InputBase {
+  readonly kind: 'select'
+  readonly value: number
+  readonly options: SelectOption[]
+}
+
+export interface GenericOutput extends OutputBase {
+  readonly kind: 'generic'
   value: number
 }
 

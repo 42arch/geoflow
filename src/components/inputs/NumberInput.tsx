@@ -6,12 +6,13 @@ interface NumberInputProps extends NumberInputType {
   onChange: (value: number) => void
 }
 
-function NumberInput({ value, step, precision, onChange }: NumberInputProps) {
+function NumberInput({ value, step, disabled, onChange }: NumberInputProps) {
   return (
     <Input
       type='number'
       step={step}
       value={String(value)}
+      disabled={disabled}
       onChange={(e) => {
         onChange(Number(e.target.value))
       }}

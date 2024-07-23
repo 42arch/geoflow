@@ -15,3 +15,7 @@
   width: 16px;
   height: 16px;
 }
+
+.react-flow__node-default {
+  width: 240px;
+}

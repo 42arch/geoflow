@@ -1,3 +1,4 @@
+import { MATH_OPERATION_OPTIONS } from '@/functions/math'
 import type { NodeState } from './types'
 
 export const NODE_LIST: NodeState[] = [
@@ -11,7 +12,7 @@ export const NODE_LIST: NodeState[] = [
         kind: 'number',
         label: '数字输入',
         hasHandle: true,
-        defaultValue: 0,
+        value: 0,
         precision: 1,
         step: 0.1
       },
@@ -20,7 +21,7 @@ export const NODE_LIST: NodeState[] = [
         kind: 'number',
         label: '数字输入2',
         hasHandle: true,
-        defaultValue: 0,
+        value: 0,
         precision: 1,
         step: 10
       }
@@ -28,7 +29,7 @@ export const NODE_LIST: NodeState[] = [
     outputs: [
       {
         id: 1,
-        kind: 'number',
+        kind: 'generic',
         hasHandle: true,
         value: 0
       }
@@ -44,7 +45,7 @@ export const NODE_LIST: NodeState[] = [
         kind: 'number',
         label: '数字输入',
         hasHandle: false,
-        defaultValue: 0,
+        value: 0,
         precision: 1,
         step: 0.1
       }
@@ -52,7 +53,48 @@ export const NODE_LIST: NodeState[] = [
     outputs: [
       {
         id: 1,
+        kind: 'generic',
+        hasHandle: true,
+        value: 0
+      }
+    ]
+  },
+  {
+    name: 'Math Node',
+    type: 'MATH_NODE',
+    schemaId: 'math',
+    inputs: [
+      {
+        id: 1,
         kind: 'number',
+        label: '数字输入',
+        hasHandle: true,
+        value: 0,
+        precision: 1,
+        step: 1
+      },
+      {
+        id: 2,
+        kind: 'select',
+        label: '操作',
+        value: 0,
+        hasHandle: false,
+        options: MATH_OPERATION_OPTIONS
+      },
+      {
+        id: 2,
+        kind: 'number',
+        label: '数字输入',
+        hasHandle: true,
+        value: 0,
+        precision: 1,
+        step: 1
+      }
+    ],
+    outputs: [
+      {
+        id: 1,
+        kind: 'generic',
         hasHandle: true,
         value: 0
       }
