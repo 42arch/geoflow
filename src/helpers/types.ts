@@ -78,7 +78,7 @@ export interface SelectOption {
 
 export interface SelectInput extends InputBase {
   readonly kind: 'select'
-  readonly value: number
+  readonly value: string
   readonly options: SelectOption[]
 }
 

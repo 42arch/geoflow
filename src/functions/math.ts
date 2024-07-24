@@ -21,7 +21,7 @@ export const MATH_OPERATION_OPTIONS: SelectOption[] = [
   { label: 'Exponent: a ^ b', value: MathOperation.POWER }
 ]
 
-export default function math(operation: MathOperation, a: number, b: number) {
+export default function math(operation: string, a: number, b: number) {
   switch (operation) {
     case MathOperation.ADD:
       return a + b

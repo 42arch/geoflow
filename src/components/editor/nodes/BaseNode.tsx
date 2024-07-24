@@ -1,10 +1,10 @@
 import { Input, NodeState } from '@/helpers/types'
 import React, { memo, useCallback } from 'react'
-import CustomHandle from './CustomHandle'
 import NodeHeader from './NodeHeader'
 import InputContainer from './InputContainer'
 import OutputContainer from './OutputContainer'
 import { useReactFlow } from '@xyflow/react'
+import { nodeSchemaToFn } from '@/functions'
 
 export interface NodeProps {
   data: NodeState
@@ -13,26 +13,35 @@ export interface NodeProps {
 
 function BaseNode({ id, data }: NodeProps) {
   const { updateNodeData } = useReactFlow()
-  const { inputs, outputs } = data
 
-  const handleInputChange = useCallback((v: Input['value'], index: number) => {
-    const newInputs = inputs.map((input, idx) => {
-      if (idx === index) {
-        return { ...input, value: v }
-      } else {
-        return input
-      }
-    })
+  const { inputs, outputs, schemaId } = data
+  const fn = nodeSchemaToFn[schemaId]
 
-    const newOutputs = outputs.map((output, idx) => ({
-      ...output,
-      value: v
-    }))
-    updateNodeData(id, {
-      inputs: newInputs,
-      outputs: newOutputs
-    })
-  }, [])
+  const handleInputChange = useCallback(
+    (v: Input['value'], index: number) => {
+      const newInputs = inputs.map((input, idx) => {
+        if (idx === index) {
+          const newInput = { ...input }
+          newInput.value = v
+          return newInput
+        } else {
+          return input
+        }
+      })
+
+      const result = fn ? fn(newInputs) : v
+
+      const newOutputs = outputs.map((output, idx) => ({
+        ...output,
+        value: result
+      }))
+      updateNodeData(id, {
+        inputs: newInputs,
+        outputs: newOutputs
+      })
+    },
+    [inputs, outputs]
+  )
 
   return (
     <div className='flex flex-col'>

@@ -19,6 +19,7 @@ interface InputPorps {
 }
 function InputContainer({ id, input, onChange }: InputPorps) {
   const { kind, value: initialValue, hasHandle } = input
+
   const InputComp = InputComponents[kind]
 
   const [value, setValue] = useState(initialValue)
@@ -52,6 +53,7 @@ function InputContainer({ id, input, onChange }: InputPorps) {
           value={value}
           disabled={isConnected}
           onChange={(v: Input['value']) => {
+            // setValue(v)
             onChange(v)
           }}
         />
@@ -66,6 +68,7 @@ function InputContainer({ id, input, onChange }: InputPorps) {
         value={value}
         disabled={isConnected}
         onChange={(v: Input['value']) => {
+          // setValue(v)
           onChange(v)
         }}
       />

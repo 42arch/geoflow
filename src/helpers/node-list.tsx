@@ -1,4 +1,4 @@
-import { MATH_OPERATION_OPTIONS } from '@/functions/math'
+import { MATH_OPERATION_OPTIONS, MathOperation } from '@/functions/math'
 import type { NodeState } from './types'
 
 export const NODE_LIST: NodeState[] = [
@@ -77,7 +77,7 @@ export const NODE_LIST: NodeState[] = [
         id: 2,
         kind: 'select',
         label: '操作',
-        value: 0,
+        value: '',
         hasHandle: false,
         options: MATH_OPERATION_OPTIONS
       },
