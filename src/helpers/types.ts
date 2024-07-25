@@ -1,3 +1,7 @@
+export type TableData = { [key: string]: string | number }[]
+
+export type InputValue = Input['value']
+
 export type NodeState = {
   name: string
   type: string
@@ -5,26 +9,6 @@ export type NodeState = {
   inputs: Input[]
   outputs: Output[]
 }
-
-// export type NodeData = {
-//   label: string
-// }
-
-// export type NodeState = {
-//   name: string
-//   type: string
-//   label: string
-//   // schemaId: string
-//   // hasEffect?: boolean
-//   // isAutomatic: boolean
-//   // func?: (args: any) => any
-//   // inputs: Input[]
-//   // outputs: Output[]
-// }
-
-// export interface NodeData {
-//   schemaId: string
-// }
 
 export type InputValueType = 'Number' | 'Table' | 'Geojson' | 'File'
 
@@ -41,7 +25,7 @@ export type Input = NumberInput | SelectInput
 
 export type InputKind = Input['kind']
 
-export type Output = GenericOutput
+export type Output = GenericOutput | TableDataOutput
 
 export type OutputKind = Output['kind']
 
@@ -84,16 +68,10 @@ export interface SelectInput extends InputBase {
 
 export interface GenericOutput extends OutputBase {
   readonly kind: 'generic'
-  value: number
+  value: number | string
 }
 
-// export interface ColorInput extends InputBase {
-//   readonly kind: 'color'
-//   readonly default: string
-// }
-
-// export interface DataInput extends InputBase {
-//   readonly kind: 'data'
-// }
-
-// export type Input = NumberInpu
+export interface TableDataOutput extends OutputBase {
+  readonly kind: 'table'
+  value: TableData
+}

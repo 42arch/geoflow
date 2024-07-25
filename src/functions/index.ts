@@ -1,11 +1,23 @@
-import { Input, NodeState } from '@/helpers/types'
 import math from './math'
+import testData from './test-data'
 
-export const nodeSchemaToFn: Record<string, (inputs: Input[]) => void> = {
-  math: (inputs) =>
-    math(
-      inputs[1].value as string,
-      inputs[0].value as number,
-      inputs[2].value as number
-    )
+interface FunctionMap {
+  [key: string]: (...args: any[]) => any
+}
+
+const functionRegistry: FunctionMap = {
+  math: math,
+  test_data: testData
+}
+
+export function executeFunction<T extends keyof FunctionMap>(
+  id: T,
+  ...args: Parameters<FunctionMap[T]>
+): ReturnType<FunctionMap[T]> {
+  const func = functionRegistry[id]
+  if (typeof func === 'function') {
+    return func(...args)
+  } else {
+    throw new Error(`Function with id ${id} not found`)
+  }
 }

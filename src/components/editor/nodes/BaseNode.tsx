@@ -4,7 +4,7 @@ import NodeHeader from './NodeHeader'
 import InputContainer from './InputContainer'
 import OutputContainer from './OutputContainer'
 import { useReactFlow } from '@xyflow/react'
-import { nodeSchemaToFn } from '@/functions'
+import { executeFunction } from '@/functions'
 
 export interface NodeProps {
   data: NodeState
@@ -15,7 +15,6 @@ function BaseNode({ id, data }: NodeProps) {
   const { updateNodeData } = useReactFlow()
 
   const { inputs, outputs, schemaId } = data
-  const fn = nodeSchemaToFn[schemaId]
 
   const handleInputChange = useCallback(
     (v: Input['value'], index: number) => {
@@ -29,7 +28,9 @@ function BaseNode({ id, data }: NodeProps) {
         }
       })
 
-      const result = fn ? fn(newInputs) : v
+      const args = newInputs.map((i) => i.value)
+
+      const result = executeFunction(schemaId, ...args)
 
       const newOutputs = outputs.map((output, idx) => ({
         ...output,

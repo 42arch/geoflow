@@ -1,37 +1,28 @@
-import { MATH_OPERATION_OPTIONS, MathOperation } from '@/functions/math'
 import type { NodeState } from './types'
+import { MATH_OPERATION_OPTIONS } from '@/functions/math'
+import { TEST_DATA_OPTIONS } from '@/functions/test-data'
 
 export const NODE_LIST: NodeState[] = [
   {
-    name: 'Test Node',
-    type: 'TEST_NODE',
-    schemaId: 'TEST_NODE',
+    name: 'Test Data',
+    type: 'TEST_DATA',
+    schemaId: 'test_data',
     inputs: [
       {
         id: 1,
-        kind: 'number',
-        label: '数字输入',
-        hasHandle: true,
-        value: 0,
-        precision: 1,
-        step: 0.1
-      },
-      {
-        id: 2,
-        kind: 'number',
-        label: '数字输入2',
-        hasHandle: true,
-        value: 0,
-        precision: 1,
-        step: 10
+        kind: 'select',
+        label: 'select data',
+        value: '',
+        hasHandle: false,
+        options: TEST_DATA_OPTIONS
       }
     ],
     outputs: [
       {
         id: 1,
-        kind: 'generic',
+        kind: 'table',
         hasHandle: true,
-        value: 0
+        value: []
       }
     ]
   },

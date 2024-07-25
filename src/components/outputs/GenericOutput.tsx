@@ -1,6 +1,4 @@
-import { Output } from '@/helpers/types'
-
-interface GenericOutputProps extends Output {
+interface GenericOutputProps {
   value: number
 }
 
