@@ -4,12 +4,14 @@ import CustomHandle from './CustomHandle'
 import { memo, useEffect, useState } from 'react'
 import { useHandleConnections, useNodesData } from '@xyflow/react'
 import SelectInput from '@/components/inputs/SelectInput'
+import DataInput from '@/components/inputs/DataInput'
 
 const InputComponents: Readonly<
   Record<InputKind, (props: any) => JSX.Element>
 > = {
   number: NumberInput,
-  select: SelectInput
+  select: SelectInput,
+  data: DataInput
 }
 
 interface InputPorps {
@@ -43,7 +45,7 @@ function InputContainer({ id, input, onChange }: InputPorps) {
       const outputs = nodeStateData.outputs
       const output = outputs[0]
 
-      if (output.kind === 'generic') {
+      if (output.kind === 'generic' || output.kind === 'table') {
         setValue(output.value)
         onChange(output.value)
       }

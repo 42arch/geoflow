@@ -8,15 +8,26 @@ import {
   useEdgesState,
   useNodesState
 } from '@xyflow/react'
-import type { Node, Edge, Connection, ReactFlowInstance } from '@xyflow/react'
+import type {
+  Node,
+  Edge,
+  Connection,
+  ReactFlowInstance,
+  EdgeProps
+} from '@xyflow/react'
 import { nanoid } from 'nanoid'
-import '@xyflow/react/dist/style.css'
-import './style.css'
 import BaseNode from './nodes/BaseNode'
 import { createNodeData } from '@/utils/node-utils'
+import '@xyflow/react/dist/style.css'
+import './style.css'
+import CustomEdge from './CustomEdge'
 
 const nodeTypes = {
-  default: BaseNode
+  custom: BaseNode
+}
+
+const edgeTypes = {
+  custom: CustomEdge
 }
 
 function Editor() {
@@ -27,7 +38,10 @@ function Editor() {
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([])
 
   const onConnect = useCallback(
-    (connection: Connection) => setEdges((eds) => addEdge(connection, eds)),
+    (connection: Connection) => {
+      const edge = { ...connection, type: 'custom' }
+      setEdges((eds) => addEdge(edge, eds))
+    },
     [setEdges]
   )
 
@@ -50,7 +64,7 @@ function Editor() {
       const newNode = {
         id: `${schemaId}-${nanoid()}`,
         // id: nodeData.name,
-        type: 'default',
+        type: 'custom',
         position,
         data: createNodeData(schemaId)
       }
@@ -63,7 +77,7 @@ function Editor() {
     <ReactFlow
       className='p-2'
       nodeTypes={nodeTypes}
-      // nodeTypes={{}}
+      edgeTypes={edgeTypes}
       nodes={nodes}
       edges={edges}
       onInit={setReactFlowInstance}

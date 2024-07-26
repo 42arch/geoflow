@@ -10,6 +10,7 @@ interface SelectInputProps {
 function SelectInput({ value, options, onChange }: SelectInputProps) {
   return (
     <Select
+      variant='bordered'
       onChange={(e) => {
         onChange(e.target.value)
       }}

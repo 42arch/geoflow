@@ -18,6 +18,7 @@ export function executeFunction<T extends keyof FunctionMap>(
   if (typeof func === 'function') {
     return func(...args)
   } else {
-    throw new Error(`Function with id ${id} not found`)
+    return args[0]
+    // throw new Error(`Function with id ${id} not found`)
   }
 }

@@ -10,6 +10,7 @@ function NumberInput({ value, step, disabled, onChange }: NumberInputProps) {
   return (
     <Input
       type='number'
+      variant='bordered'
       step={step}
       value={String(value)}
       disabled={disabled}

@@ -17,5 +17,5 @@
 }
 
 .react-flow__node-default {
-  width: 240px;
+  min-width: 240px;
 }

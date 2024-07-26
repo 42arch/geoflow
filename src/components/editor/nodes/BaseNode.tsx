@@ -1,10 +1,11 @@
 import { Input, NodeState } from '@/helpers/types'
-import React, { memo, useCallback } from 'react'
+import { memo, useCallback } from 'react'
 import NodeHeader from './NodeHeader'
 import InputContainer from './InputContainer'
 import OutputContainer from './OutputContainer'
 import { useReactFlow } from '@xyflow/react'
 import { executeFunction } from '@/functions'
+import NodeFooter from './NodeFooter'
 
 export interface NodeProps {
   data: NodeState
@@ -36,6 +37,7 @@ function BaseNode({ id, data }: NodeProps) {
         ...output,
         value: result
       }))
+
       updateNodeData(id, {
         inputs: newInputs,
         outputs: newOutputs
@@ -45,22 +47,26 @@ function BaseNode({ id, data }: NodeProps) {
   )
 
   return (
-    <div className='flex flex-col'>
+    <div className='flex min-w-60 flex-col rounded-md border-1.5 border-default-200 bg-default-200'>
       <NodeHeader label={data.name} />
-      <div className='flex w-full flex-col justify-around gap-2 pb-2'>
-        {inputs.map((input, index) => (
-          <InputContainer
-            key={index}
-            id={index}
-            input={input}
-            onChange={(v) => handleInputChange(v, index)}
-          />
-        ))}
-
-        {outputs.map((output, index) => (
-          <OutputContainer key={index} id={index} output={output} />
-        ))}
+      <div className='my-2 flex w-full flex-col justify-around gap-2 bg-default-200'>
+        <div className='flex flex-col gap-2 bg-default-100 py-2'>
+          {inputs.map((input, index) => (
+            <InputContainer
+              key={index}
+              id={index}
+              input={input}
+              onChange={(v) => handleInputChange(v, index)}
+            />
+          ))}
+        </div>
+        <div className='bg-default-100 py-2'>
+          {outputs.map((output, index) => (
+            <OutputContainer key={index} id={index} output={output} />
+          ))}
+        </div>
       </div>
+      <NodeFooter />
     </div>
   )
 }

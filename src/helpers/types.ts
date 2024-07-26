@@ -1,4 +1,4 @@
-export type TableData = { [key: string]: string | number }[]
+export type TableData = { key: string; [key: string]: string | number }[]
 
 export type InputValue = Input['value']
 
@@ -21,11 +21,11 @@ export type Metadata = {
 }
 
 // export type Input = NumberInput | ColorInput | DataInput
-export type Input = NumberInput | SelectInput
+export type Input = NumberInput | SelectInput | DataInput
 
 export type InputKind = Input['kind']
 
-export type Output = GenericOutput | TableDataOutput
+export type Output = GenericOutput | TableDataOutput | TableViewOutput
 
 export type OutputKind = Output['kind']
 
@@ -66,6 +66,11 @@ export interface SelectInput extends InputBase {
   readonly options: SelectOption[]
 }
 
+export interface DataInput extends InputBase {
+  readonly kind: 'data'
+  readonly value: TableData
+}
+
 export interface GenericOutput extends OutputBase {
   readonly kind: 'generic'
   value: number | string
@@ -73,5 +78,10 @@ export interface GenericOutput extends OutputBase {
 
 export interface TableDataOutput extends OutputBase {
   readonly kind: 'table'
+  value: TableData
+}
+
+export interface TableViewOutput extends OutputBase {
+  readonly kind: 'table-view'
   value: TableData
 }

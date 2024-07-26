@@ -90,13 +90,27 @@ export const NODE_LIST: NodeState[] = [
         value: 0
       }
     ]
+  },
+  {
+    name: 'Table View',
+    type: 'TABLE_VIEW',
+    schemaId: 'table-view',
+    inputs: [
+      {
+        id: 1,
+        kind: 'data',
+        label: '数字输入',
+        hasHandle: true,
+        value: []
+      }
+    ],
+    outputs: [
+      {
+        id: 1,
+        kind: 'table-view',
+        hasHandle: false,
+        value: []
+      }
+    ]
   }
-  // {
-  //   name: 'Handle Node',
-  //   type: 'HANDLE_NODE'
-  // },
-  // {
-  //   name: 'View Node',
-  //   type: 'VIEW_NODE'
-  // }
 ]
