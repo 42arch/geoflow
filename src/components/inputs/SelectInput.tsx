@@ -11,6 +11,8 @@ function SelectInput({ value, options, onChange }: SelectInputProps) {
   return (
     <Select
       variant='bordered'
+      value={value}
+      defaultSelectedKeys={[value]}
       onChange={(e) => {
         onChange(e.target.value)
       }}

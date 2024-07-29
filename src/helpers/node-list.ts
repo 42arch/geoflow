@@ -38,7 +38,7 @@ export const NODE_LIST: NodeState[] = [
         hasHandle: false,
         value: 0,
         precision: 1,
-        step: 0.1
+        step: 1
       }
     ],
     outputs: [
@@ -68,7 +68,7 @@ export const NODE_LIST: NodeState[] = [
         id: 2,
         kind: 'select',
         label: '操作',
-        value: '',
+        value: MATH_OPERATION_OPTIONS[0].value,
         hasHandle: false,
         options: MATH_OPERATION_OPTIONS
       },

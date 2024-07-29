@@ -26,6 +26,8 @@ export type MathFunction = (
 ) => number | undefined
 
 const math: MathFunction = (a: number, operation: string, b: number) => {
+  console.log('math', a, operation, b)
+
   switch (operation) {
     case MathOperation.ADD:
       return a + b

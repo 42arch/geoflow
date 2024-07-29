@@ -21,7 +21,7 @@ function NodeItem({ nodeState }: { nodeState: NodeState }) {
 
 function Sider() {
   return (
-    <div className='h-full p-4'>
+    <div className='h-full '>
       <div className=''>Search Bar</div>
       <div className='flex select-none flex-col gap-3 py-2'>
         {NODE_LIST.map((node) => (
