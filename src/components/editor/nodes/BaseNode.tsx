@@ -1,89 +1,43 @@
-import { Input, NodeState } from '@/helpers/types'
-import { memo, useCallback, useEffect, useState } from 'react'
+import { InputValue, NodeState } from '@/helpers/types'
+import { memo, useEffect, useState } from 'react'
 import NodeHeader from './NodeHeader'
 import InputContainer from './InputContainer'
 import OutputContainer from './OutputContainer'
 import { useReactFlow } from '@xyflow/react'
 import { executeFunction } from '@/functions'
 import NodeFooter from './NodeFooter'
-import { createId } from '@/utils/create-id'
 
 export interface NodeProps {
   data: NodeState
   id: string
 }
 
-const delayedExecution = (func: () => void, delay: number) => {
-  setTimeout(func, delay)
-}
-
 function BaseNode({ id, data }: NodeProps) {
   const { updateNodeData } = useReactFlow()
 
   const { inputs, outputs, schemaId } = data
+  const [inputValues, setInputValues] = useState<InputValue[]>(
+    inputs.map((i) => i.value)
+  )
 
-  const [values, setValues] = useState<any[]>([])
-
-  // const handleInputChange = useCallback(
-  //   (v: Input['value'], index: number) => {
-  //     // console.log('input changed', v)
-
-  //     const newValues = [...values]
-  //     newValues[index] = v
-  //     setValues(newValues)
-
-  //     const newInputs = inputs.map((input, idx) => {
-  //       console.log('input item', input)
-
-  //       if (idx === index) {
-  //         const newInput = { ...input }
-  //         newInput.value = v
-  //         return newInput
-  //       } else {
-  //         return input
-  //       }
-  //     })
-
-  //     const args = newInputs.map((i) => i.value)
-
-  //     const result = executeFunction(schemaId, ...args)
-
-  //     const newOutputs = outputs.map((output, idx) => ({
-  //       ...output,
-  //       value: result
-  //     }))
-
-  //     updateNodeData(id, {
-  //       inputs: newInputs,
-  //       outputs: newOutputs
-  //     })
-  //   },
-  //   [inputs, outputs]
-  // )
-
-  const handleInputChange = (v: Input['value'], index: number) => {
-    console.log(23333, v, index)
-
-    setValues((prev) => {
-      const newValues = [...prev]
-      newValues[index] = v
-      return newValues
+  useEffect(() => {
+    const newInputs = inputs.map((input, idx) => {
+      return {
+        ...input,
+        value: inputValues[idx]
+      }
     })
-  }
+    const result = executeFunction(schemaId, ...inputValues)
+    const newOutputs = outputs.map((output, idx) => ({
+      ...output,
+      value: result
+    }))
 
-  // useEffect(() => {
-  //   console.log('values xxxxx', values)
-
-  //   const newOutputs = outputs.map((output, idx) => ({
-  //     ...output,
-  //     value: values[0]
-  //   }))
-
-  //   updateNodeData(id, {
-  //     // inputs: newInputs,
-  //     outputs: newOutputs
-  //   })
-  // }, [values, outputs])
+    updateNodeData(id, {
+      inputs: newInputs,
+      outputs: newOutputs
+    })
+  }, [inputValues])
 
   return (
     <div className='flex min-w-60 flex-col rounded-md border-1.5 border-default-200 bg-default-200'>
@@ -96,18 +50,12 @@ function BaseNode({ id, data }: NodeProps) {
               id={index}
               input={input}
               onChange={(v) => {
-                const args = [v, inputs[1].value, v]
-                const result = executeFunction(schemaId, ...args)
-                const newOutputs = outputs.map((output, idx) => ({
-                  ...output,
-                  value: result
-                }))
-                updateNodeData(id, {
-                  // input: newInputs,
-                  outputs: newOutputs
+                setInputValues((prev) => {
+                  const newValues = [...prev]
+                  newValues[index] = v
+                  return newValues
                 })
               }}
-              // onChange={(v) => handleInputChange(v, index)}
             />
           ))}
         </div>

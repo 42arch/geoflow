@@ -26,10 +26,9 @@ function InputContainer({ id, input, onChange }: InputPorps) {
 
   const [value, setValue] = useState<InputValue>(initialValue)
 
-  // useEffect(() => {
-  //   console.log('initial value: ' + initialValue)
-  //   setValue(initialValue)
-  // }, [initialValue])
+  useEffect(() => {
+    setValue(initialValue)
+  }, [initialValue])
 
   const connections = useHandleConnections({
     type: 'target',
@@ -61,7 +60,7 @@ function InputContainer({ id, input, onChange }: InputPorps) {
           value={value}
           disabled={isConnected}
           onChange={(v: Input['value']) => {
-            setValue(v)
+            // setValue(v)
             onChange(v)
           }}
         />
@@ -76,7 +75,7 @@ function InputContainer({ id, input, onChange }: InputPorps) {
         value={value}
         disabled={isConnected}
         onChange={(v: Input['value']) => {
-          setValue(v)
+          // setValue(v)
           onChange(v)
         }}
       />
