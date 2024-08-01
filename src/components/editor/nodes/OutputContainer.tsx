@@ -8,7 +8,7 @@ const OutputComponents: Readonly<
   Record<OutputKind, (props: any) => JSX.Element>
 > = {
   generic: GenericOutput,
-  table: TableDataOutput,
+  dataset: TableDataOutput,
   'table-view': TableViewOutput
 }
 

@@ -1,6 +1,14 @@
-import type { NodeState } from './types'
+import { STRING_FILTER_OPTIONS } from '@/functions/filter'
+import type { DataSet, NodeState } from './types'
 import { MATH_OPERATION_OPTIONS } from '@/functions/math'
 import { TEST_DATA_OPTIONS } from '@/functions/test-data'
+
+const DEFAULT_DATASET_VALUE: DataSet = {
+  data: [],
+  properties: {
+    columns: []
+  }
+}
 
 export const NODE_LIST: NodeState[] = [
   {
@@ -12,7 +20,7 @@ export const NODE_LIST: NodeState[] = [
         id: 1,
         kind: 'select',
         label: 'select data',
-        value: '',
+        value: TEST_DATA_OPTIONS[0].value,
         hasHandle: false,
         options: TEST_DATA_OPTIONS
       }
@@ -20,9 +28,9 @@ export const NODE_LIST: NodeState[] = [
     outputs: [
       {
         id: 1,
-        kind: 'table',
+        kind: 'dataset',
         hasHandle: true,
-        value: []
+        value: DEFAULT_DATASET_VALUE
       }
     ]
   },
@@ -92,16 +100,65 @@ export const NODE_LIST: NodeState[] = [
     ]
   },
   {
+    name: 'Filter Node',
+    type: 'FILTER_NODE',
+    schemaId: 'filter',
+    inputs: [
+      {
+        id: 1,
+        kind: 'dataset',
+        label: '数据集输入',
+        hasHandle: true,
+        value: DEFAULT_DATASET_VALUE
+      },
+      {
+        id: 2,
+        kind: 'select',
+        label: '数据集列名',
+        value: '',
+        hasHandle: false,
+        hasDynamicOptions: true,
+        dynamicOptionsDependency: [1, 'properties.columns'],
+        // dependencyId: 1,
+        // deppendecyField: 'properties.columns',
+        options: []
+      },
+      {
+        id: 3,
+        kind: 'select',
+        label: '操作',
+        value: STRING_FILTER_OPTIONS[0].value,
+        hasHandle: false,
+        options: STRING_FILTER_OPTIONS
+      },
+      {
+        id: 4,
+        kind: 'text',
+        label: '条件值',
+        hasHandle: true,
+        value: ''
+      }
+    ],
+    outputs: [
+      {
+        id: 1,
+        kind: 'dataset',
+        hasHandle: true,
+        value: DEFAULT_DATASET_VALUE
+      }
+    ]
+  },
+  {
     name: 'Table View',
     type: 'TABLE_VIEW',
     schemaId: 'table-view',
     inputs: [
       {
         id: 1,
-        kind: 'data',
-        label: '数字输入',
+        kind: 'dataset',
+        label: '数据集输入',
         hasHandle: true,
-        value: []
+        value: DEFAULT_DATASET_VALUE
       }
     ],
     outputs: [
@@ -109,7 +166,7 @@ export const NODE_LIST: NodeState[] = [
         id: 1,
         kind: 'table-view',
         hasHandle: false,
-        value: []
+        value: DEFAULT_DATASET_VALUE
       }
     ]
   }

@@ -1,3 +1,4 @@
+import textFilter from './filter'
 import math from './math'
 import testData from './test-data'
 
@@ -7,6 +8,7 @@ interface FunctionMap {
 
 const functionRegistry: FunctionMap = {
   math: math,
+  filter: textFilter,
   test_data: testData
 }
 

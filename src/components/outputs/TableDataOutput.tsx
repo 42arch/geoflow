@@ -1,12 +1,14 @@
+import { DataSet } from '@/helpers/types'
+
 interface Props {
-  value: { [key: string]: string | number }[]
+  value: DataSet
 }
 
 function TableDataOutput({ value }: Props) {
   return (
     <div className='flex items-center justify-end gap-2'>
       <span>Result:</span>
-      <span>{value.length} rows</span>
+      <span>{value?.data?.length || 0} rows</span>
     </div>
   )
 }
