@@ -18,7 +18,9 @@ export const MATH_OPERATION_OPTIONS: SelectOption[] = [
   { label: 'Substract: a - b', value: MathOperation.SUBTRACT },
   { label: 'Multiply: a × b', value: MathOperation.MULTIPLY },
   { label: 'Divide: a ÷ b', value: MathOperation.DIVIDE },
-  { label: 'Exponent: a ^ b', value: MathOperation.POWER }
+  { label: 'Exponent: a ^ b', value: MathOperation.POWER },
+  { label: 'Maximun: max(a, b)', value: MathOperation.MAXIMUM },
+  { label: 'MINIMUM: min(a, b)', value: MathOperation.MINIMUM }
 ]
 
 export type MathFunction = (
@@ -37,6 +39,10 @@ const math: MathFunction = (a: number, operation: string, b: number) => {
       return a / b
     case MathOperation.POWER:
       return Math.pow(a, b)
+    case MathOperation.MAXIMUM:
+      return Math.max(a, b)
+    case MathOperation.MINIMUM:
+      return Math.min(a, b)
     default:
       break
   }

@@ -1,13 +1,15 @@
-import GenericOutput from '@/components/outputs/GenericOutput'
 import { Output, OutputKind } from '@/helpers/types'
 import CustomHandle from './CustomHandle'
+import GenericOutput from '@/components/outputs/GenericOutput'
 import TableDataOutput from '@/components/outputs/TableDataOutput'
+import TableViewOutput from '@/components/outputs/TableViewOutput'
 
 const OutputComponents: Readonly<
   Record<OutputKind, (props: any) => JSX.Element>
 > = {
   generic: GenericOutput,
-  table: TableDataOutput
+  dataset: TableDataOutput,
+  'table-view': TableViewOutput
 }
 
 interface OutputProps {

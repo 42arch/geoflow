@@ -1,6 +1,7 @@
-import { SelectOption, TableData } from '@/helpers/types'
+import { DataSet, SelectOption, TableData } from '@/helpers/types'
+import { createId } from '@/utils/create-id'
 
-const cities: TableData = [
+const cities: { [key: string]: string | number }[] = [
   {
     name: 'New York',
     latitude: 40.7128,
@@ -213,7 +214,7 @@ const cities: TableData = [
   }
 ]
 
-const TestDataMap: Record<string, TableData> = {
+const TestDataMap: Record<string, { [key: string]: string | number }[]> = {
   cities: cities
 }
 
@@ -221,10 +222,22 @@ export const TEST_DATA_OPTIONS: SelectOption[] = [
   { label: 'Cities', value: 'cities' }
 ]
 
-export type TestDataFunction = (...args: [string]) => TableData | undefined
+export type TestDataFunction = (...args: [string]) => DataSet | undefined
 
 const testData: TestDataFunction = (v: string) => {
-  return TestDataMap[v]
+  const originalData = TestDataMap[v]
+  const tableData: TableData = originalData?.map((row) => {
+    return {
+      key: createId(),
+      ...row
+    }
+  })
+  return {
+    data: tableData,
+    properties: {
+      columns: Object.keys(tableData[0])
+    }
+  }
 }
 
 export default testData

@@ -4,12 +4,16 @@ import CustomHandle from './CustomHandle'
 import { memo, useEffect, useState } from 'react'
 import { useHandleConnections, useNodesData } from '@xyflow/react'
 import SelectInput from '@/components/inputs/SelectInput'
+import DataSetInput from '@/components/inputs/DataSetInput'
+import TextInput from '@/components/inputs/TextInput'
 
 const InputComponents: Readonly<
   Record<InputKind, (props: any) => JSX.Element>
 > = {
   number: NumberInput,
-  select: SelectInput
+  text: TextInput,
+  select: SelectInput,
+  dataset: DataSetInput
 }
 
 interface InputPorps {
@@ -19,7 +23,6 @@ interface InputPorps {
 }
 function InputContainer({ id, input, onChange }: InputPorps) {
   const { kind, value: initialValue, hasHandle } = input
-
   const InputComp = InputComponents[kind]
 
   const [value, setValue] = useState<InputValue>(initialValue)
@@ -43,7 +46,7 @@ function InputContainer({ id, input, onChange }: InputPorps) {
       const outputs = nodeStateData.outputs
       const output = outputs[0]
 
-      if (output.kind === 'generic') {
+      if (output.kind === 'generic' || output.kind === 'dataset') {
         setValue(output.value)
         onChange(output.value)
       }
@@ -58,6 +61,7 @@ function InputContainer({ id, input, onChange }: InputPorps) {
           value={value}
           disabled={isConnected}
           onChange={(v: Input['value']) => {
+            // setValue(v)
             onChange(v)
           }}
         />
@@ -72,6 +76,7 @@ function InputContainer({ id, input, onChange }: InputPorps) {
         value={value}
         disabled={isConnected}
         onChange={(v: Input['value']) => {
+          // setValue(v)
           onChange(v)
         }}
       />

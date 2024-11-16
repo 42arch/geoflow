@@ -1,18 +1,20 @@
-import { NumberInput as NumberInputType } from '@/helpers/types'
 import { Input } from '@nextui-org/react'
 
-interface NumberInputProps extends NumberInputType {
+function NumberInput({
+  value,
+  step,
+  onChange
+}: {
   value: number
-  onChange: (value: number) => void
-}
-
-function NumberInput({ value, step, disabled, onChange }: NumberInputProps) {
+  step: number
+  onChange: (v: number) => void
+}) {
   return (
     <Input
       type='number'
+      variant='bordered'
       step={step}
       value={String(value)}
-      disabled={disabled}
       onChange={(e) => {
         onChange(Number(e.target.value))
       }}

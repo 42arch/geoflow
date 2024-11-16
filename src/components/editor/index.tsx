@@ -8,15 +8,35 @@ import {
   useEdgesState,
   useNodesState
 } from '@xyflow/react'
-import type { Node, Edge, Connection, ReactFlowInstance } from '@xyflow/react'
+import type {
+  Node,
+  Edge,
+  Connection,
+  ReactFlowInstance,
+  EdgeProps
+} from '@xyflow/react'
 import { nanoid } from 'nanoid'
+import { createNodeData } from '@/utils/node-utils'
 import '@xyflow/react/dist/style.css'
 import './style.css'
-import BaseNode from './nodes/BaseNode'
-import { createNodeData } from '@/utils/node-utils'
+import CustomEdge from './CustomEdge'
+import NumberNode from '../custom-nodes/NumberNode'
+import MathNode from '../custom-nodes/MathNode'
+import ViewerNode from '../custom-nodes/ViewerNode'
+import { NODE_LIST } from './backend'
+import CustomNode from '../custom-nodes/CustomNode'
+import { cloneDeep } from 'lodash-es'
+import { createId } from '@/utils/create-id'
 
 const nodeTypes = {
-  default: BaseNode
+  // number: NumberNode,
+  // math: MathNode,
+  // viewer: ViewerNode
+  custom: CustomNode
+}
+
+const edgeTypes = {
+  custom: CustomEdge
 }
 
 function Editor() {
@@ -27,7 +47,10 @@ function Editor() {
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([])
 
   const onConnect = useCallback(
-    (connection: Connection) => setEdges((eds) => addEdge(connection, eds)),
+    (connection: Connection) => {
+      const edge = { ...connection, type: 'custom' }
+      setEdges((eds) => addEdge(edge, eds))
+    },
     [setEdges]
   )
 
@@ -39,7 +62,7 @@ function Editor() {
   const onDrop: DragEventHandler<HTMLDivElement> = useCallback(
     (event) => {
       event.preventDefault()
-      const schemaId = event.dataTransfer.getData('application/reactflow')
+      const type = event.dataTransfer.getData('application/reactflow')
 
       const position = reactFlowInstance?.screenToFlowPosition({
         x: event.clientX,
@@ -47,13 +70,24 @@ function Editor() {
       })
       if (!position) return
 
+      const newNodeList = cloneDeep(NODE_LIST)
+      const data = newNodeList.find((n) => n.type === type)
+      data?.inputs.forEach((input) => {
+        input.id = `${input.id}-${createId()}`
+      })
+      data?.outputs.forEach((output) => {
+        output.id = `${output.id}-${createId()}`
+      })
+
       const newNode = {
-        id: `${schemaId}-${nanoid()}`,
+        id: `${type}-${createId()}`,
         // id: nodeData.name,
-        type: 'default',
+        type: 'custom',
         position,
-        data: createNodeData(schemaId)
+        data: data || {}
+        // data: createNodeData(schemaId)
       }
+
       setNodes((nds) => [...nds, newNode])
     },
     [reactFlowInstance]
@@ -63,7 +97,7 @@ function Editor() {
     <ReactFlow
       className='p-2'
       nodeTypes={nodeTypes}
-      // nodeTypes={{}}
+      edgeTypes={edgeTypes}
       nodes={nodes}
       edges={edges}
       onInit={setReactFlowInstance}

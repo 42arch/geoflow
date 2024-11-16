@@ -1,5 +1,5 @@
 interface GenericOutputProps {
-  value: number
+  value: number | string
 }
 
 function GenericOutput({ value }: GenericOutputProps) {
