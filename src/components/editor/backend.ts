@@ -285,41 +285,29 @@ export class Executor {
         node: newNode
       })
 
-      // 通知节点完成
-      this.eventEmitter.emit(`nodeComplete:${node.id}`, newNode)
-
       // 更新 nodes 数组中的节点状态
       const nodeIndex = this.nodes.findIndex((n) => n.id === node.id)
       if (nodeIndex !== -1) {
         this.nodes[nodeIndex] = newNode
       }
 
+      // 通知节点完成
+      this.eventEmitter.emit(`nodeComplete:${node.id}`, newNode)
+
       // 处理后续节点
       const nextNodes = getOutgoers(newNode, this.nodes, this.edges)
       for (const nextNode of nextNodes) {
-        if (this.status === 'paused') {
-          if (!this.pausedQueue.some((n) => n.id === nextNode.id)) {
-            this.pausedQueue.push(nextNode)
-          }
-          continue
-        }
+        // if (this.status === 'paused') {
+        //   if (!this.pausedQueue.some((n) => n.id === nextNode.id)) {
+        //     // 在添加到暂停队列前更新输入值
+        //     this.updateNodeInputs(nextNode)
+        //     this.pausedQueue.push(nextNode)
+        //   }
+        //   continue
+        // }
 
         // 更新下一个节点的输入值
-        const edges = getConnectedEdges([newNode, nextNode], this.edges)
-        for (const edge of edges) {
-          const output = newNode.data.outputs.find(
-            (o) => o.id === edge.sourceHandle
-          )
-          if (output) {
-            const inputIndex = nextNode.data.inputs.findIndex(
-              (i) => i.id === edge.targetHandle
-            )
-            if (inputIndex !== -1) {
-              nextNode.data.inputs[inputIndex].value = output.value
-            }
-          }
-        }
-        // 直接调用 handleNode 处理下一个节点
+        this.updateNodeInputs(nextNode)
         await this.handleNode(nextNode)
       }
     } catch (error) {
@@ -340,12 +328,19 @@ export class Executor {
 
   resume() {
     this.status = 'running'
-    const nodesToProcess = [...this.pausedQueue]
+
+    // 按照正确的依赖顺序处理暂停队列中的节点
+    const nodesToProcess = this.sortNodesByDependencies(this.pausedQueue)
     this.pausedQueue = []
 
+    // 继续执行暂停的节点
     nodesToProcess.forEach((node) => {
+      // 更新节点的输入值
+      this.updateNodeInputs(node)
       this.handleNode(node)
     })
+
+    this.eventEmitter.emit('executionResumed')
   }
 
   getStartNodes() {
@@ -368,6 +363,50 @@ export class Executor {
         node: node
       })
       node.data.isPending = true
+    })
+  }
+
+  // 添加节点排序方法
+  private sortNodesByDependencies(nodes: Node<NodeData>[]): Node<NodeData>[] {
+    const sorted: Node<NodeData>[] = []
+    const visited = new Set<string>()
+
+    const visit = (node: Node<NodeData>) => {
+      if (visited.has(node.id)) return
+      visited.add(node.id)
+
+      // 先处理前置节点
+      const prevNodes = getIncomers(node, this.nodes, this.edges)
+      prevNodes.forEach((prevNode) => {
+        if (nodes.some((n) => n.id === prevNode.id)) {
+          visit(prevNode)
+        }
+      })
+
+      sorted.push(node)
+    }
+
+    nodes.forEach((node) => visit(node))
+    return sorted
+  }
+
+  // 添加更新节点输入值的方法
+  private updateNodeInputs(node: Node<NodeData>) {
+    const prevNodes = getIncomers(node, this.nodes, this.edges)
+
+    prevNodes.forEach((prevNode) => {
+      const edges = getConnectedEdges([prevNode, node], this.edges)
+      edges.forEach((edge) => {
+        const output = prevNode.data.outputs.find(
+          (o) => o.id === edge.sourceHandle
+        )
+        if (output) {
+          const input = node.data.inputs.find((i) => i.id === edge.targetHandle)
+          if (input) {
+            input.value = output.value
+          }
+        }
+      })
     })
   }
 }
