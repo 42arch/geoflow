@@ -1,4 +1,3 @@
-import EventEmitter from '@/core/event-emitter'
 import { MATH_OPERATION_OPTIONS } from '@/functions/math'
 import { SelectOption } from '@/helpers/types'
 import { createId } from '@/utils/create-id'
@@ -180,19 +179,21 @@ export class Executor {
   public status: 'finish' | 'running' | 'paused'
   private nodes: Node<NodeData>[]
   private edges: Edge[]
+  private nodesMap: Map<string, Node<NodeData>>
+  private edgesMap: Map<string, Edge>
   private currentNode: Node<NodeData>
-  private pausedQueue: Node<NodeData>[] = []
-  private eventEmitter: EventEmitter
+  private nodePromises: Map<string, Promise<void>>
   private callback: Callback | undefined
 
   constructor(nodes: Node<NodeData>[], edges: Edge[]) {
-    this.eventEmitter = new EventEmitter()
     this.status = 'finish'
     this.nodes = nodes
     this.edges = edges
-    // this.nodesMap = new Map(nodes.map((node) => [node.id, node]))
-    // this.edgesMap = new Map(edges.map((edge) => [edge.id, edge]))
+    this.nodesMap = new Map(nodes.map((node) => [node.id, node]))
+    this.edgesMap = new Map(edges.map((edge) => [edge.id, edge]))
     this.currentNode = nodes[0]
+
+    this.nodePromises = new Map()
   }
 
   watch(callback: Callback) {
@@ -218,134 +219,65 @@ export class Executor {
   }
 
   async handleNode(node: Node<NodeData>) {
-    // 如果当前是暂停状态，将节点加入暂停队列
-    if (this.status === 'paused') {
-      if (!this.pausedQueue.some((n) => n.id === node.id)) {
-        this.pausedQueue.push(node)
-      }
-      return
-    }
-
     this.currentNode = node
     const currentNode = node
     const prevNodes = getIncomers(currentNode, this.nodes, this.edges)
 
-    // 如果有pending的前置节点，订阅它们的完成事件
-    if (prevNodes.some((n) => n.data.isPending)) {
-      const handlePrevNodesComplete = () => {
-        // 检查所有前置节点是否都完成
-        if (!prevNodes.some((n) => n.data.isPending)) {
-          // 所有前置节点都完成了，执行当前节点
-          this.executeNode(currentNode)
-        }
+    // 等待所有前置节点完成
+    if (prevNodes.length > 0) {
+      try {
+        await Promise.all(prevNodes.map((n) => this.nodePromises.get(n.id)))
+      } catch (error) {
+        console.error('Error waiting for previous nodes:', error)
       }
-
-      // 订阅所有前置节点的完成事件
-      prevNodes.forEach((prevNode) => {
-        this.eventEmitter.on(
-          `nodeComplete:${prevNode.id}`,
-          handlePrevNodesComplete
-        )
-      })
-      return
     }
 
-    // 如果没有pending的前置节点，直接执行
-    await this.executeNode(currentNode)
-  }
-
-  private async executeNode(node: Node<NodeData>) {
-    // 如果是暂停状态，将节点加入暂停队列并返回
-    console.log('status', this.status)
-    if (this.status === 'paused') {
-      if (!this.pausedQueue.some((n) => n.id === node.id)) {
-        this.pausedQueue.push(node)
-      }
-      return
-    }
-
-    const { inputs, outputs, func } = node.data
-    const inputValues = inputs.map((i) => i.value)
-
-    try {
+    // 为当前节点创建一个Promise
+    const nodePromise = (async () => {
+      const { inputs, outputs, func } = currentNode.data
+      const inputValues = inputs.map((i) => i.value)
       const result = await func(...inputValues)
-      const newNode = cloneDeep(node)
+      const newNode = cloneDeep(currentNode)
+      const nextNodes = getOutgoers(currentNode, this.nodes, this.edges)
+
       const newOutput = outputs[0]
       newOutput.value = result
 
       newNode.data = {
-        ...node.data,
-        outputs: [newOutput],
-        isPending: false
+        ...currentNode.data,
+        outputs: [newOutput]
       }
 
-      // 更新节点状态
+      newNode.data.isPending = false
       this.callback?.({
         status: this.status,
         node: newNode
       })
-
-      // 通知节点完成
-      this.eventEmitter.emit(`nodeComplete:${node.id}`, newNode)
-
-      // 更新 nodes 数组中的节点状态
-      const nodeIndex = this.nodes.findIndex((n) => n.id === node.id)
-      if (nodeIndex !== -1) {
-        this.nodes[nodeIndex] = newNode
-      }
-
-      // 处理后续节点
-      const nextNodes = getOutgoers(newNode, this.nodes, this.edges)
-      for (const nextNode of nextNodes) {
-        if (this.status === 'paused') {
-          if (!this.pausedQueue.some((n) => n.id === nextNode.id)) {
-            this.pausedQueue.push(nextNode)
-          }
-          continue
-        }
-
-        // 更新下一个节点的输入值
-        const edges = getConnectedEdges([newNode, nextNode], this.edges)
-        for (const edge of edges) {
-          const output = newNode.data.outputs.find(
-            (o) => o.id === edge.sourceHandle
-          )
-          if (output) {
-            const inputIndex = nextNode.data.inputs.findIndex(
-              (i) => i.id === edge.targetHandle
+      if (nextNodes.length) {
+        for (let nextNode of nextNodes) {
+          const edges = getConnectedEdges([newNode, nextNode], this.edges)
+          for (let edge of edges) {
+            const output = newNode.data.outputs.find(
+              (o) => o.id === edge.sourceHandle
             )
-            if (inputIndex !== -1) {
-              nextNode.data.inputs[inputIndex].value = output.value
+            if (output) {
+              nextNode.data.inputs.forEach((i) => {
+                if (i.id === edge.targetHandle) {
+                  i.value = output?.value
+                }
+              })
             }
           }
+          this.handleNode(nextNode)
         }
-        // 直接调用 handleNode 处理下一个节点
-        await this.handleNode(nextNode)
       }
-    } catch (error) {
-      console.error('Error executing node:', error)
-    }
-  }
+    })()
 
-  cleanup() {
-    // 清理所有事件监听
-    this.nodes.forEach((node) => {
-      this.eventEmitter.off(`nodeComplete:${node.id}`, () => {})
-    })
-  }
+    // 存储当前节点的Promise
+    this.nodePromises.set(node.id, nodePromise)
 
-  pause() {
-    this.status = 'paused'
-  }
-
-  resume() {
-    this.status = 'running'
-    const nodesToProcess = [...this.pausedQueue]
-    this.pausedQueue = []
-
-    nodesToProcess.forEach((node) => {
-      this.handleNode(node)
-    })
+    // 执行并等待完成
+    await nodePromise
   }
 
   getStartNodes() {
