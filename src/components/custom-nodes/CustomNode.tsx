@@ -1,13 +1,7 @@
 import NodeHeader from '../editor/nodes/NodeHeader'
 import NodeFooter from '../editor/nodes/NodeFooter'
-import {
-  NodeProps,
-  useReactFlow,
-  Node,
-  useHandleConnections,
-  useNodesData
-} from '@xyflow/react'
-import { NodeData } from '../editor/backend'
+import { NodeProps, useReactFlow, Node } from '@xyflow/react'
+import { NodeData } from '@/types'
 import OutputContainer from './OutputContainer'
 import InputContainer from './InputContianer'
 

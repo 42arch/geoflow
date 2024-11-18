@@ -1,4 +1,4 @@
-import { Input } from '../editor/backend'
+import { Input } from '@/types'
 import CustomHandle from '../editor/nodes/CustomHandle'
 import NumberInput from '../inputs/NumberInput'
 import SelectInput from '../inputs/SelectInput'

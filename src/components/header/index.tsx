@@ -1,16 +1,14 @@
-import { findAllPathsFromSourcesToTargets } from '@/utils/find-path'
 import { Button } from '@nextui-org/react'
 import { Pause, Play } from '@phosphor-icons/react'
-import { Node, useEdges, useNodes, useReactFlow } from '@xyflow/react'
-import math, { MATH_OPERATION_OPTIONS } from '@/functions/math'
+import { useEdges, useNodes, useReactFlow } from '@xyflow/react'
 import { useCallback, useEffect, useRef } from 'react'
-import { Executor, NodeData } from '../editor/backend'
+import { EdgeType, NodeType } from '@/types'
+import { Executor } from '@/core/executor'
 
 function Header() {
   const { updateNodeData } = useReactFlow()
-  const nodes = useNodes<Node<NodeData>>()
-  const edges = useEdges()
-  const { setNodes } = useReactFlow()
+  const nodes = useNodes<NodeType>()
+  const edges = useEdges<EdgeType>()
   const executorRef = useRef<Executor>()
 
   useEffect(() => {
@@ -20,7 +18,7 @@ function Header() {
       executorRef.current.update(nodes, edges)
     }
     executorRef.current.watch((data) => {
-      console.log('watch', data.status, data.node.id)
+      // console.log('watch', data.status, data.node.id)
       updateNodeData(data.node.id, data.node.data)
     })
   }, [nodes, edges])

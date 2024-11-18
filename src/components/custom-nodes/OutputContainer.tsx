@@ -1,4 +1,4 @@
-import { Output } from '../editor/backend'
+import { Output } from '@/types'
 import CustomHandle from '../editor/nodes/CustomHandle'
 import GenericOutput from '../outputs/GenericOutput'
 

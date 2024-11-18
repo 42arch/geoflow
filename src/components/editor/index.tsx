@@ -15,14 +15,9 @@ import type {
   ReactFlowInstance,
   EdgeProps
 } from '@xyflow/react'
-import { nanoid } from 'nanoid'
-import { createNodeData } from '@/utils/node-utils'
 import '@xyflow/react/dist/style.css'
 import './style.css'
 import CustomEdge from './CustomEdge'
-import NumberNode from '../custom-nodes/NumberNode'
-import MathNode from '../custom-nodes/MathNode'
-import ViewerNode from '../custom-nodes/ViewerNode'
 import { NODE_LIST } from './backend'
 import CustomNode from '../custom-nodes/CustomNode'
 import { cloneDeep } from 'lodash-es'
@@ -72,6 +67,7 @@ function Editor() {
 
       const newNodeList = cloneDeep(NODE_LIST)
       const data = newNodeList.find((n) => n.type === type)
+
       data?.inputs.forEach((input) => {
         input.id = `${input.id}-${createId()}`
       })
@@ -81,7 +77,6 @@ function Editor() {
 
       const newNode = {
         id: `${type}-${createId()}`,
-        // id: nodeData.name,
         type: 'custom',
         position,
         data: data || {}
