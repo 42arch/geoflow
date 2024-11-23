@@ -1,5 +1,5 @@
-import { Select, SelectItem } from '@nextui-org/react'
 import React from 'react'
+import { Select, SelectItem } from '../ui/select'
 
 interface SelectInputProps {
   value: string
@@ -10,11 +10,9 @@ interface SelectInputProps {
 function SelectInput({ value, options, onChange }: SelectInputProps) {
   return (
     <Select
-      variant='bordered'
       value={value}
-      defaultSelectedKeys={[value]}
-      onChange={(e) => {
-        onChange(e.target.value)
+      onValueChange={(v) => {
+        onChange(v)
       }}
     >
       {options.map((option) => (

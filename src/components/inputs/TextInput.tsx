@@ -1,5 +1,5 @@
 import { TextInput as TextInputType } from '@/helpers/types'
-import { Input } from '@nextui-org/react'
+import { Input } from '../ui/input'
 
 interface TextInputProps extends TextInputType {
   value: string
@@ -9,7 +9,6 @@ interface TextInputProps extends TextInputType {
 function TextInput({ value, disabled, onChange }: TextInputProps) {
   return (
     <Input
-      variant='bordered'
       value={value}
       disabled={disabled}
       onChange={(e) => {

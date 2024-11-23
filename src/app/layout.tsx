@@ -1,6 +1,5 @@
 import localFont from 'next/font/local'
-import { cn } from '@/utils/classname'
-import { Providers } from './providers'
+import { cn } from '@/utils/cn'
 import './globals.css'
 
 export const fontInter = localFont({
@@ -39,9 +38,7 @@ export default async function LocaleLayout({
 }) {
   return (
     <html lang={locale}>
-      <body className={cn(fontInter.variable)}>
-        <Providers>{children}</Providers>
-      </body>
+      <body className={cn(fontInter.variable)}>{children}</body>
     </html>
   )
 }
