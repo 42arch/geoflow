@@ -4,6 +4,7 @@ import NodeFooter from './node-footer'
 import { NodeData } from '@/types'
 import OutputContainer from './output-container'
 import InputContainer from './input-container'
+import { Separator } from '../ui/separator'
 
 export type CommonNode = Node<NodeData, 'common'>
 
@@ -44,7 +45,8 @@ function CommonNode({ id, data }: NodeProps<CommonNode>) {
             />
           ))}
         </div>
-        <div className='bg-default-100 py-2'>
+        <Separator />
+        <div className='bg-zinc-100 '>
           {outputs.map((output, idx) => (
             <OutputContainer key={idx} {...output} />
           ))}

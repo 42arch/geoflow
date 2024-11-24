@@ -1,3 +1,3 @@
 export default function GeoJSONOutput() {
-  return <div className='h-6 p-0 pe-3 text-right'>GeoJSON</div>
+  return <div className='flex h-8 items-center justify-end px-1'>GeoJSON</div>
 }
