@@ -3,12 +3,16 @@ import { Button, Group, Input, NumberField } from 'react-aria-components'
 
 interface NumberInputProps {
   value: number
+  minValue?: number
+  maxValue?: number
   step?: number
   onChange: (v: number) => void
 }
 
 export default function NumberInput({
   value,
+  minValue = 0,
+  maxValue = 100,
   step = 1,
   onChange
 }: NumberInputProps) {
@@ -17,21 +21,22 @@ export default function NumberInput({
       defaultValue={value}
       value={value}
       step={step}
-      minValue={0}
+      minValue={minValue}
+      maxValue={maxValue}
       onChange={onChange}
     >
       <div className='space-y-2'>
-        <Group className='border-input data-[focus-within]:border-ring data-[focus-within]:ring-ring/20 relative inline-flex h-9 w-full items-center overflow-hidden whitespace-nowrap rounded-lg border text-sm shadow-sm shadow-black/5 transition-shadow data-[disabled]:opacity-50 data-[focus-within]:outline-none data-[focus-within]:ring-[3px]'>
+        <Group className='relative inline-flex h-9 w-full items-center overflow-hidden whitespace-nowrap rounded-lg border border-input text-sm shadow-sm shadow-black/5 transition-shadow data-[focus-within]:border-ring data-[disabled]:opacity-50 data-[focus-within]:outline-none data-[focus-within]:ring-[3px] data-[focus-within]:ring-ring/20'>
           <Button
             slot='decrement'
-            className='border-input text-muted-foreground/80 hover:bg-accent -ms-px flex aspect-square h-[inherit] items-center justify-center rounded-s-lg border bg-background text-sm transition-shadow hover:text-foreground disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50'
+            className='-ms-px flex aspect-square h-[inherit] items-center justify-center rounded-s-lg border border-input bg-background text-sm text-muted-foreground/80 transition-shadow hover:bg-accent hover:text-foreground disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50'
           >
             <Minus size={16} strokeWidth={2} aria-hidden='true' />
           </Button>
           <Input className='w-full grow bg-background px-3 py-2 text-center tabular-nums text-foreground focus:outline-none' />
           <Button
             slot='increment'
-            className='border-input text-muted-foreground/80 hover:bg-accent -me-px flex aspect-square h-[inherit] items-center justify-center rounded-e-lg border bg-background text-sm transition-shadow hover:text-foreground disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50'
+            className='-me-px flex aspect-square h-[inherit] items-center justify-center rounded-e-lg border border-input bg-background text-sm text-muted-foreground/80 transition-shadow hover:bg-accent hover:text-foreground disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50'
           >
             <Plus size={16} strokeWidth={2} aria-hidden='true' />
           </Button>

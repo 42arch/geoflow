@@ -30,7 +30,7 @@ function CommonNode({ id, data }: NodeProps<CommonNode>) {
   }
 
   return (
-    <div className='flex min-w-60 flex-col rounded-md border-1.5 bg-zinc-50'>
+    <div className='border-1.5 flex min-w-60 flex-col rounded-md bg-zinc-50'>
       <NodeHeader label={data.type} />
       <div className='flex w-full flex-col justify-around gap-2 bg-zinc-100 py-2'>
         <div className='flex flex-col gap-2 py-2'>

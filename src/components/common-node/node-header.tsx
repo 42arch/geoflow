@@ -4,7 +4,7 @@ interface NodeHeaderProps {
 
 function NodeHeader({ label }: NodeHeaderProps) {
   return (
-    <div className='flex items-center justify-center rounded-t-md border-b bg-default-100 px-4 py-2 font-bold'>
+    <div className='drag-handle__custom bg-default-100 flex cursor-move items-center justify-center rounded-t-md border-b px-4 py-2 font-bold'>
       {label}
     </div>
   )

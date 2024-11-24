@@ -1,7 +1,8 @@
 import { Node, Edge } from '@xyflow/react'
+import { FeatureCollection } from 'geojson'
 
 interface InputBase {
-  readonly id: string
+  id: string
   readonly hasHandle: boolean
   readonly label?: string
 }
@@ -9,6 +10,14 @@ interface InputBase {
 export interface NumberInput extends InputBase {
   readonly kind: 'number'
   value: number
+  minValue?: number
+  maxValue?: number
+  step?: number
+}
+
+export interface BooleanInput extends InputBase {
+  readonly kind: 'boolean'
+  value: boolean
 }
 
 export interface SelectInput extends InputBase {
@@ -19,12 +28,12 @@ export interface SelectInput extends InputBase {
 
 export interface GeojsonFileInput extends InputBase {
   readonly kind: 'geojson-file'
-  value: object | null
+  value: FeatureCollection | null
 }
 
 export interface GeojsonInput extends InputBase {
   readonly kind: 'geojson'
-  value: object | null
+  value: FeatureCollection | null
 }
 
 export type SelectOption = {
@@ -32,12 +41,23 @@ export type SelectOption = {
   label: string
 }
 
-export type Input = NumberInput | SelectInput | GeojsonFileInput | GeojsonInput
+export type Input =
+  | NumberInput
+  | BooleanInput
+  | SelectInput
+  | GeojsonFileInput
+  | GeojsonInput
 
 export type InputKind = Input['kind']
 
+export type ValueKind =
+  | 'number'
+  | 'geojson-point'
+  | 'geojson-line'
+  | 'geojson-polygon'
+
 export interface OutputBase {
-  readonly id: string
+  id: string
   readonly hasHandle: boolean
   readonly label?: string
 }
@@ -49,12 +69,12 @@ export interface NumberOutput extends OutputBase {
 
 export interface GeojsonOutput extends OutputBase {
   readonly kind: 'geojson'
-  value: object | null
+  value: FeatureCollection | null
 }
 
 export interface GeojsonViewerOutput extends OutputBase {
   readonly kind: 'geojson-viewer'
-  value: object | null
+  value: FeatureCollection | null
 }
 
 export type Output = NumberOutput | GeojsonOutput | GeojsonViewerOutput

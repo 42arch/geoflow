@@ -13,6 +13,7 @@
     "@radix-ui/react-dialog": "^1.1.2",
     "@radix-ui/react-select": "^2.1.2",
     "@radix-ui/react-slot": "^1.1.0",
+    "@radix-ui/react-switch": "^1.1.1",
     "@turf/turf": "^7.1.0",
     "@vercel/analytics": "^1.2.0",
     "@xyflow/react": "12.3.2",
@@ -39,6 +40,7 @@
     "zustand": "^4.5.2"
   },
   "devDependencies": {
+    "@types/geojson": "^7946.0.14",
     "@types/lodash-es": "^4.17.12",
     "@types/mapbox-gl": "^3.4.1",
     "@types/node": "^20",

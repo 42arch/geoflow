@@ -4,6 +4,7 @@ import NumberInput from '../inputs/number-input'
 import SelectInput from '../inputs/SelectInput'
 import GeoJSONFileInput from '../inputs/geojson-file-input'
 import GeoJSONInput from '../inputs/geojson-input'
+import BooleanInput from '../inputs/boolean-input'
 
 type Props = Input & {
   onChange: (v: string | number) => void
@@ -11,6 +12,7 @@ type Props = Input & {
 
 const InputComponents: Record<InputKind, React.ComponentType<any>> = {
   number: NumberInput,
+  boolean: BooleanInput,
   select: SelectInput,
   geojson: GeoJSONInput,
   'geojson-file': GeoJSONFileInput

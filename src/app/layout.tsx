@@ -1,5 +1,6 @@
 import localFont from 'next/font/local'
 import { cn } from '@/utils/cn'
+import 'mapbox-gl/dist/mapbox-gl.css'
 import './globals.css'
 
 export const fontInter = localFont({

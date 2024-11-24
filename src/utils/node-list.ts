@@ -1,4 +1,5 @@
 import { NodeData } from '@/types'
+import { simplify } from '@turf/turf'
 
 export const NODE_LIST: NodeData[] = [
   {
@@ -13,6 +14,46 @@ export const NODE_LIST: NodeData[] = [
         label: 'geojson',
         kind: 'geojson-file',
         value: null
+      }
+    ],
+    outputs: [
+      {
+        id: 'geojson-output',
+        hasHandle: true,
+        kind: 'geojson',
+        value: null
+      }
+    ]
+  },
+  {
+    type: 'simplify',
+    hasEffect: true,
+    isPending: false,
+    func: (...args: any) => [simplify(args[0], { tolerance: args[1] })],
+    inputs: [
+      {
+        id: 'simplify-input',
+        hasHandle: true,
+        label: 'geojson',
+        kind: 'geojson',
+        value: null
+      },
+      {
+        id: 'simplify-tolerance',
+        hasHandle: true,
+        label: 'tolerance',
+        kind: 'number',
+        step: 0.1,
+        minValue: 0,
+        maxValue: 10,
+        value: 0.1
+      },
+      {
+        id: '',
+        hasHandle: false,
+        label: 'highQuality',
+        kind: 'boolean',
+        value: false
       }
     ],
     outputs: [

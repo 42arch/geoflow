@@ -72,10 +72,11 @@ function FlowCanvas() {
         output.id = `${output.id}-${createId()}`
       })
 
-      const newNode = {
+      const newNode: Node = {
         id: `${type}-${createId()}`,
         type: 'common',
         position,
+        dragHandle: '.drag-handle__custom',
         data: data || {}
       }
 

@@ -1,6 +1,8 @@
-import { LineLayerSpecification } from 'mapbox-gl'
 import { useEffect } from 'react'
-import Map, { Layer, Source } from 'react-map-gl'
+import { LineLayerSpecification } from 'mapbox-gl'
+import Map, { Layer, Source, useMap } from 'react-map-gl'
+import { bbox } from '@turf/turf'
+import { FeatureCollection } from 'geojson'
 
 const lineStyle: LineLayerSpecification = {
   id: 'line',
@@ -9,32 +11,49 @@ const lineStyle: LineLayerSpecification = {
   filter: ['==', '$type', 'LineString'],
   paint: {
     'line-width': 4,
-    'line-color': '#ccff00'
+    'line-color': '#0059ff'
   }
 }
 
 interface Props {
-  value: object
+  value: FeatureCollection
+}
+
+function GeoJsonLayer({ value }: Props) {
+  const { current: map } = useMap()
+  useEffect(() => {
+    if (value) {
+      const bound = bbox(value)
+      map?.fitBounds(
+        [
+          [bound[0], bound[1]],
+          [bound[2], bound[3]]
+        ],
+        { padding: 10 }
+      )
+    }
+  }, [value])
+  return (
+    <Source id='geojson-source' type='geojson' data={value}>
+      <Layer {...lineStyle} />
+    </Source>
+  )
 }
 
 export default function GeoJSONViewerOutput({ value }: Props) {
-  useEffect(() => {}, [value])
-
   return (
-    <div className='p-1'>
+    <div className='h-[200px] w-full p-1'>
       <Map
         mapboxAccessToken='pk.eyJ1IjoiaW5nZW40MiIsImEiOiJjazlsMnliMXoyMWoxM2tudm1hajRmaHZ6In0.rWx_wAz2cAeMIzxQQfPDPA'
         initialViewState={{
           longitude: 0,
           latitude: 0,
-          zoom: 3
+          zoom: 1
         }}
-        // style={{ width: 600, height: 400 }}
+        attributionControl={false}
         mapStyle='mapbox://styles/mapbox/streets-v9'
       >
-        <Source id='geojson-source' type='geojson' data={value}>
-          <Layer {...lineStyle} />
-        </Source>
+        <GeoJsonLayer value={value} />
       </Map>
     </div>
   )
