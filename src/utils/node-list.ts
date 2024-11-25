@@ -5,13 +5,13 @@ export const NODE_LIST: NodeData[] = [
   {
     type: 'geojson-file',
     hasEffect: true,
-    isPending: false,
     func: (v: any) => [v],
     inputs: [
       {
         id: 'file-input',
         hasHandle: false,
         label: 'geojson',
+        labelPosition: 'top',
         kind: 'geojson-file',
         value: null
       }
@@ -28,30 +28,28 @@ export const NODE_LIST: NodeData[] = [
   {
     type: 'simplify',
     hasEffect: true,
-    isPending: false,
     func: (...args: any) => [simplify(args[0], { tolerance: args[1] })],
     inputs: [
       {
         id: 'simplify-input',
         hasHandle: true,
-        label: 'geojson',
         kind: 'geojson',
         value: null
       },
       {
         id: 'simplify-tolerance',
         hasHandle: true,
-        label: 'tolerance',
+        label: 'Tolerance',
         kind: 'number',
         step: 0.1,
         minValue: 0,
-        maxValue: 10,
-        value: 0.1
+        maxValue: 100,
+        value: 1
       },
       {
         id: '',
         hasHandle: false,
-        label: 'highQuality',
+        label: 'High Quality',
         kind: 'boolean',
         value: false
       }
@@ -68,7 +66,6 @@ export const NODE_LIST: NodeData[] = [
   {
     type: 'number',
     hasEffect: true,
-    isPending: false,
     func: (v: number) => [v],
     inputs: [
       {
@@ -91,7 +88,6 @@ export const NODE_LIST: NodeData[] = [
   {
     type: 'add-ten',
     hasEffect: true,
-    isPending: false,
     func: (v: number) => [v + 10],
     inputs: [
       {
@@ -114,7 +110,6 @@ export const NODE_LIST: NodeData[] = [
   {
     type: 'long-time-add',
     hasEffect: true,
-    isPending: false,
     func: (v: number) =>
       new Promise((resolve) => {
         setTimeout(() => {
@@ -142,7 +137,6 @@ export const NODE_LIST: NodeData[] = [
   {
     type: 'add-number',
     hasEffect: true,
-    isPending: false,
     func: (v1: number, v2: number) => [v1 + v2],
     inputs: [
       {
@@ -172,7 +166,6 @@ export const NODE_LIST: NodeData[] = [
   {
     type: 'number-viewer',
     hasEffect: true,
-    isPending: false,
     func: (v: number) => [v],
     inputs: [
       {
@@ -195,7 +188,6 @@ export const NODE_LIST: NodeData[] = [
   {
     type: 'geojson-viewer',
     hasEffect: true,
-    isPending: false,
     func: (v: object) => [v],
     inputs: [
       {

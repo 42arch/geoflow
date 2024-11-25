@@ -11,7 +11,7 @@ import {
   CommandItem,
   CommandList
 } from '@/components/ui/command'
-import { cn } from '@/lib/utils'
+import { cn } from '@/utils/cn'
 
 export interface Option {
   value: string
@@ -456,7 +456,7 @@ const MultipleSelector = React.forwardRef<
       >
         <div
           className={cn(
-            'border-input focus-within:border-ring focus-within:ring-ring/20 relative min-h-[38px] rounded-lg border text-sm transition-shadow focus-within:outline-none focus-within:ring-[3px] has-[:disabled]:cursor-not-allowed has-[:disabled]:opacity-50',
+            'relative min-h-[38px] rounded-lg border border-input text-sm transition-shadow focus-within:border-ring focus-within:outline-none focus-within:ring-[3px] focus-within:ring-ring/20 has-[:disabled]:cursor-not-allowed has-[:disabled]:opacity-50',
             {
               'p-1': selected.length !== 0,
               'cursor-text': !disabled && selected.length !== 0
@@ -483,7 +483,7 @@ const MultipleSelector = React.forwardRef<
                 >
                   {option.label}
                   <button
-                    className='text-muted-foreground/80 focus-visible:outline-ring/70 absolute -inset-y-px -end-px flex size-7 items-center justify-center rounded-e-lg border border-transparent p-0 outline-0 transition-colors hover:text-foreground focus-visible:outline focus-visible:outline-2'
+                    className='absolute -inset-y-px -end-px flex size-7 items-center justify-center rounded-e-lg border border-transparent p-0 text-muted-foreground/80 outline-0 transition-colors hover:text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-ring/70'
                     onKeyDown={(e) => {
                       if (e.key === 'Enter') {
                         handleUnselect(option)
@@ -530,7 +530,7 @@ const MultipleSelector = React.forwardRef<
                   : placeholder
               }
               className={cn(
-                'placeholder:text-muted-foreground flex-1 bg-transparent outline-none disabled:cursor-not-allowed',
+                'flex-1 bg-transparent outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed',
                 {
                   'w-full': hidePlaceholderWhenSelected,
                   'px-3 py-2': selected.length === 0,
@@ -546,7 +546,7 @@ const MultipleSelector = React.forwardRef<
                 onChange?.(selected.filter((s) => s.fixed))
               }}
               className={cn(
-                'text-muted-foreground/80 focus-visible:outline-ring/70 absolute end-0 top-0 flex size-9 items-center justify-center rounded-lg border border-transparent transition-colors hover:text-foreground focus-visible:outline focus-visible:outline-2',
+                'absolute end-0 top-0 flex size-9 items-center justify-center rounded-lg border border-transparent text-muted-foreground/80 transition-colors hover:text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-ring/70',
                 (hideClearAllButton ||
                   disabled ||
                   selected.length < 1 ||
@@ -562,7 +562,7 @@ const MultipleSelector = React.forwardRef<
         <div className='relative'>
           <div
             className={cn(
-              'border-input absolute top-2 z-10 w-full overflow-hidden rounded-lg border',
+              'absolute top-2 z-10 w-full overflow-hidden rounded-lg border border-input',
               'data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95',
               !open && 'hidden'
             )}

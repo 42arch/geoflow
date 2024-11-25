@@ -40,7 +40,7 @@ function CommonEdge({
           style={{
             transform: `translate(-50%, -50%) translate(${labelX}px,${labelY}px)`
           }}
-          className='nodrag nopan pointer-events-auto absolute cursor-pointer rounded-full border-1.5 border-default-500 bg-default-200 p-1'
+          className='nodrag nopan border-1.5 border-default-500 bg-default-200 pointer-events-auto absolute cursor-pointer rounded-full p-1'
           onClick={() => {
             setEdges((es) => es.filter((e) => e.id !== id))
           }}

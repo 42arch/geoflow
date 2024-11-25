@@ -5,11 +5,13 @@ import { NodeData } from '@/types'
 import OutputContainer from './output-container'
 import InputContainer from './input-container'
 import { Separator } from '../ui/separator'
+import NodeMenu from './node-menu'
 
 export type CommonNode = Node<NodeData, 'common'>
 
-function CommonNode({ id, data }: NodeProps<CommonNode>) {
-  const { inputs, outputs } = data
+function CommonNode(props: NodeProps<CommonNode>) {
+  const { id, data } = props
+  const { inputs, outputs, _state } = data
 
   const { updateNodeData } = useReactFlow()
 
@@ -31,29 +33,33 @@ function CommonNode({ id, data }: NodeProps<CommonNode>) {
   }
 
   return (
-    <div className='border-1.5 flex min-w-60 flex-col rounded-md bg-zinc-50'>
-      <NodeHeader label={data.type} />
-      <div className='flex w-full flex-col justify-around gap-2 bg-zinc-100 py-2'>
-        <div className='flex flex-col gap-2 py-2'>
-          {inputs.map((input, idx) => (
-            <InputContainer
-              key={idx}
-              {...input}
-              onChange={(v) => {
-                handleValueChange(input.id, v)
-              }}
-            />
-          ))}
+    <NodeMenu {...props}>
+      <div className='border-1.5 flex min-w-60 flex-col rounded-md bg-zinc-50'>
+        <NodeHeader label={data.type} />
+        <div className='flex w-full flex-col justify-around gap-2 bg-zinc-100 py-2'>
+          <div className='flex flex-col gap-2 py-2'>
+            {inputs.map((input, idx) => (
+              <InputContainer
+                key={idx}
+                {...input}
+                onChange={(v) => {
+                  if (input.id) {
+                    handleValueChange(input.id, v)
+                  }
+                }}
+              />
+            ))}
+          </div>
+          <Separator />
+          <div className='bg-zinc-100 '>
+            {outputs.map((output, idx) => (
+              <OutputContainer key={idx} {...output} />
+            ))}
+          </div>
         </div>
-        <Separator />
-        <div className='bg-zinc-100 '>
-          {outputs.map((output, idx) => (
-            <OutputContainer key={idx} {...output} />
-          ))}
-        </div>
+        <NodeFooter state={_state} />
       </div>
-      <NodeFooter isPending={!!data.isPending} />
-    </div>
+    </NodeMenu>
   )
 }
 

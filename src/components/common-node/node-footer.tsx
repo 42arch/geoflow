@@ -1,11 +1,13 @@
+import { NodeState } from '@/types'
+
 interface NodeFooterProps {
-  isPending: boolean
+  state?: NodeState
 }
 
-function NodeFooter({ isPending }: NodeFooterProps) {
+function NodeFooter({ state }: NodeFooterProps) {
   return (
-    <div className='flex h-4 items-center justify-center rounded-b-md bg-default-200 px-4'>
-      {isPending ? 'pending' : ''}
+    <div className='flex h-8 items-center justify-center rounded-b-md bg-zinc-200 px-4'>
+      {state?.isPending ? 'pending' : ''}
     </div>
   )
 }

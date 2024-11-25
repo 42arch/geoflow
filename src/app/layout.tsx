@@ -39,7 +39,7 @@ export default async function LocaleLayout({
 }) {
   return (
     <html lang={locale}>
-      <body className={cn(fontInter.variable)}>{children}</body>
+      <body className={cn(fontInter.variable, 'font-sans')}>{children}</body>
     </html>
   )
 }

@@ -64,13 +64,21 @@ function FlowCanvas() {
 
       const newNodeList = cloneDeep(NODE_LIST)
       const data = newNodeList.find((n) => n.type === type)
+      if (!data) return
 
-      data?.inputs.forEach((input) => {
+      data.inputs.forEach((input) => {
         input.id = `${input.id}-${createId()}`
+        input._state = {
+          isConnected: false
+        }
       })
-      data?.outputs.forEach((output) => {
+      data.outputs.forEach((output) => {
         output.id = `${output.id}-${createId()}`
       })
+      data._state = {
+        isPending: false,
+        duration: 0
+      }
 
       const newNode: Node = {
         id: `${type}-${createId()}`,
@@ -79,10 +87,9 @@ function FlowCanvas() {
         dragHandle: '.drag-handle__custom',
         data: data || {}
       }
-
       setNodes((nds) => [...nds, newNode])
     },
-    [reactFlowInstance]
+    [reactFlowInstance, setNodes]
   )
 
   return (

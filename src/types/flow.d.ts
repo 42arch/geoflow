@@ -2,9 +2,13 @@ import { Node, Edge } from '@xyflow/react'
 import { FeatureCollection } from 'geojson'
 
 interface InputBase {
-  id: string
+  id?: string
   readonly hasHandle: boolean
   readonly label?: string
+  readonly labelPosition?: 'top' | 'left'
+  _state?: {
+    isConnected: boolean
+  }
 }
 
 export interface NumberInput extends InputBase {
@@ -80,17 +84,18 @@ export interface GeojsonViewerOutput extends OutputBase {
 export type Output = NumberOutput | GeojsonOutput | GeojsonViewerOutput
 export type OutputKind = Output['kind']
 
+export type NodeState = {
+  isPending: boolean
+  duration: number
+}
+
 export type NodeData = {
   type: string
   hasEffect: boolean
-  isPending?: boolean
   func: (...args: any[]) => void
   inputs: Input[]
   outputs: Output[]
-  _meta?: {
-    isPending: boolean
-    duration: number
-  }
+  _state?: NodeState
 }
 
 export type HandleType = 'input' | 'output'

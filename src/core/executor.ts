@@ -14,14 +14,12 @@ export class Executor {
   private pausedQueue: NodeType[] = []
   private eventEmitter: EventEmitter
   private callback: Callback | undefined
-  private controller: AbortController
 
   constructor(nodes: NodeType[], edges: EdgeType[]) {
     this.eventEmitter = new EventEmitter()
     this.status = 'idle'
     this.nodes = nodes
     this.edges = edges
-    this.controller = new AbortController()
   }
 
   public watch(callback: Callback) {
@@ -32,7 +30,8 @@ export class Executor {
     this.status = 'running'
     this.pendingAllNodes()
     const startNodes = this.getStartNodes()
-    for (let node of startNodes) {
+
+    for (const node of startNodes) {
       await this.handleNode(node)
     }
   }
@@ -52,6 +51,7 @@ export class Executor {
     }
 
     const currentNode = node
+
     // const prevNodes = getIncomers(currentNode, this.nodes, this.edges)
     // if (prevNodes.some((n) => n.data.isPending)) {
     //   const handlePrevNodesComplete = async () => {
@@ -102,7 +102,10 @@ export class Executor {
       newNode.data = {
         ...node.data,
         outputs: newOutputs,
-        isPending: false
+        _state: {
+          isPending: false,
+          duration: 0
+        }
       }
 
       // update node
@@ -146,9 +149,7 @@ export class Executor {
     const nodesToProcess = this.sortNodesByDependencies(this.pausedQueue)
     this.pausedQueue = []
 
-    // 继续执行暂停的节点
     nodesToProcess.forEach((node) => {
-      // 更新节点的输入值
       this.updateNodeInputs(node)
       this.handleNode(node)
     })
@@ -165,6 +166,8 @@ export class Executor {
       inDegree[edge.target]++
     })
 
+    // console.log('start', this.nodes, inDegree)
+
     return this.nodes.filter((node) => inDegree[node.id] === 0)
   }
 
@@ -174,7 +177,10 @@ export class Executor {
         status: this.status,
         node: node
       })
-      node.data.isPending = true
+      node.data._state = {
+        isPending: true,
+        duration: 0
+      }
     })
   }
 
@@ -189,7 +195,7 @@ export class Executor {
 
       // 先处理前置节点
       const prevNodes = getIncomers(node, this.nodes, this.edges)
-      for (let prevNode of prevNodes) {
+      for (const prevNode of prevNodes) {
         if (nodes.some((n) => n.id === prevNode.id)) {
           visit(prevNode)
         }
@@ -206,9 +212,9 @@ export class Executor {
   private updateNodeInputs(node: NodeType) {
     const prevNodes = getIncomers(node, this.nodes, this.edges)
 
-    for (let prevNode of prevNodes) {
+    for (const prevNode of prevNodes) {
       const edges = getConnectedEdges([prevNode, node], this.edges)
-      for (let edge of edges) {
+      for (const edge of edges) {
         const output = prevNode.data.outputs.find(
           (o) => o.id === edge.sourceHandle
         )

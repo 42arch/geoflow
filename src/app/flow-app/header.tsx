@@ -21,7 +21,7 @@ function Header() {
       // console.log('watch', data.status, data.node.id)
       updateNodeData(data.node.id, data.node.data)
     })
-  }, [nodes, edges])
+  }, [nodes, edges, updateNodeData])
 
   const handleRun = useCallback(() => {
     executorRef.current?.run()

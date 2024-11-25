@@ -3,6 +3,7 @@ import { Button, Group, Input, NumberField } from 'react-aria-components'
 
 interface NumberInputProps {
   value: number
+  disabled?: boolean
   minValue?: number
   maxValue?: number
   step?: number
@@ -11,6 +12,7 @@ interface NumberInputProps {
 
 export default function NumberInput({
   value,
+  disabled,
   minValue = 0,
   maxValue = 100,
   step = 1,
@@ -18,6 +20,7 @@ export default function NumberInput({
 }: NumberInputProps) {
   return (
     <NumberField
+      isDisabled={disabled}
       defaultValue={value}
       value={value}
       step={step}
