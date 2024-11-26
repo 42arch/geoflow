@@ -1,3 +1,4 @@
+import buffer, { UNIT_OPTIONS, UNIT_VALUE } from '@/functions/buffer'
 import geojsonFile from '@/functions/geojson-file'
 import math, {
   MATH_OPERATION_OPTIONS,
@@ -63,6 +64,52 @@ export const NODE_LIST: NodeData[] = [
         label: 'High Quality',
         kind: 'boolean',
         value: false
+      }
+    ],
+    outputs: [
+      {
+        id: 'geojson-output',
+        hasHandle: true,
+        kind: 'geojson',
+        value: null
+      }
+    ]
+  },
+  {
+    type: 'buffer',
+    hasEffect: true,
+    func: buffer,
+    inputs: [
+      {
+        id: '',
+        hasHandle: true,
+        kind: 'geojson',
+        value: null
+      },
+      {
+        id: '',
+        hasHandle: true,
+        label: 'Radius',
+        kind: 'number',
+        step: 0.1,
+        minValue: 0,
+        maxValue: 100,
+        value: 1
+      },
+      {
+        id: '',
+        hasHandle: false,
+        label: 'Units',
+        kind: 'select',
+        options: UNIT_OPTIONS,
+        value: UNIT_VALUE
+      },
+      {
+        id: '',
+        hasHandle: false,
+        label: 'Steps',
+        kind: 'number',
+        value: 8
       }
     ],
     outputs: [
