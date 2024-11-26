@@ -1,4 +1,4 @@
-import { SelectOption } from '@/helpers/types'
+import { NodeFunction, SelectOption } from '@/types'
 
 export enum MathOperation {
   ADD = 'add',
@@ -20,31 +20,29 @@ export const MATH_OPERATION_OPTIONS: SelectOption[] = [
   { label: 'Divide: a ÷ b', value: MathOperation.DIVIDE },
   { label: 'Exponent: a ^ b', value: MathOperation.POWER },
   { label: 'Maximun: max(a, b)', value: MathOperation.MAXIMUM },
-  { label: 'MINIMUM: min(a, b)', value: MathOperation.MINIMUM }
+  { label: 'Minimum: min(a, b)', value: MathOperation.MINIMUM }
 ]
 
-export type MathFunction = (
-  ...args: [number, string, number]
-) => number | undefined
+export const MATH_OPERATION_VALUE = MATH_OPERATION_OPTIONS[0].value
 
-const math: MathFunction = (a: number, operation: string, b: number) => {
+const math: NodeFunction = (a: number, operation: string, b: number) => {
   switch (operation) {
     case MathOperation.ADD:
-      return a + b
+      return [a + b]
     case MathOperation.SUBTRACT:
-      return a - b
+      return [a - b]
     case MathOperation.MULTIPLY:
-      return a * b
+      return [a * b]
     case MathOperation.DIVIDE:
-      return a / b
+      return [a / b]
     case MathOperation.POWER:
-      return Math.pow(a, b)
+      return [Math.pow(a, b)]
     case MathOperation.MAXIMUM:
-      return Math.max(a, b)
+      return [Math.max(a, b)]
     case MathOperation.MINIMUM:
-      return Math.min(a, b)
+      return [Math.min(a, b)]
     default:
-      break
+      return []
   }
 }
 

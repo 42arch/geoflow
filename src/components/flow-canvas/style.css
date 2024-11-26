@@ -6,14 +6,14 @@
 }
 
 .react-flow__handle {
-  width: 12px;
-  height: 12px;
+  width: 14px;
+  height: 14px;
   transition: all 0.3s ease;
 }
 
 .react-flow__handle:hover {
-  width: 16px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
 }
 
 .react-flow__node-default {

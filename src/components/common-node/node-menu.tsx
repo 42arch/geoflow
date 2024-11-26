@@ -21,9 +21,9 @@ function NodeMenu({
 }: PropsWithChildren<NodeProps<CommonNode>>) {
   const { deleteElements, updateNodeData } = useReactFlow()
 
-  const handleDuplicate = () => {}
+  const onDuplicate = () => {}
 
-  const handleResetInputs = () => {
+  const onResetInputs = () => {
     const rawNode = NODE_LIST.find((node) => node.type === data.type)
     // todo: don't reset the connected inputs
     if (rawNode) {
@@ -31,9 +31,9 @@ function NodeMenu({
     }
   }
 
-  const handleResetConnections = () => {}
+  const onResetConnections = () => {}
 
-  const handleDelete = () => {
+  const onDelete = () => {
     deleteElements({ nodes: [{ id: id }] })
   }
 
@@ -41,10 +41,7 @@ function NodeMenu({
     <ContextMenu>
       <ContextMenuTrigger>{children}</ContextMenuTrigger>
       <ContextMenuContent className='w-40'>
-        <ContextMenuItem
-          onClick={handleDuplicate}
-          className='pointer-events-none'
-        >
+        <ContextMenuItem onClick={onDuplicate} className='pointer-events-none'>
           <Copy className='mr-2' />
           Duplicate
         </ContextMenuItem>
@@ -54,10 +51,10 @@ function NodeMenu({
             Reset
           </ContextMenuSubTrigger>
           <ContextMenuSubContent className=''>
-            <ContextMenuItem onClick={handleResetInputs}>
+            <ContextMenuItem onClick={onResetInputs}>
               Reset Inputs
             </ContextMenuItem>
-            <ContextMenuItem onClick={handleResetConnections}>
+            <ContextMenuItem onClick={onResetConnections}>
               Reset Connections
             </ContextMenuItem>
           </ContextMenuSubContent>
@@ -65,7 +62,7 @@ function NodeMenu({
         <ContextMenuSeparator />
         <ContextMenuItem
           className='text-red-500 focus:text-red-500'
-          onClick={handleDelete}
+          onClick={onDelete}
         >
           <Trash className='mr-2' />
           Delete

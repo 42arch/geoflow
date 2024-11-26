@@ -16,12 +16,13 @@ import type {
   EdgeProps
 } from '@xyflow/react'
 import '@xyflow/react/dist/style.css'
-import './style.css'
 import CommonEdge from '../common-edge'
 import CommonNode from '../common-node'
 import { cloneDeep } from 'lodash-es'
 import { createId } from '@/utils/create-id'
 import { NODE_LIST } from '@/utils/node-list'
+import { NodeData, NodeType } from '@/types'
+import './style.css'
 
 const nodeTypes = {
   common: CommonNode
@@ -40,10 +41,27 @@ function FlowCanvas() {
 
   const onConnect = useCallback(
     (connection: Connection) => {
-      const edge = { ...connection, type: 'common' }
-      setEdges((eds) => addEdge(edge, eds))
+      const { source, sourceHandle, target, targetHandle } = connection
+      const sourceNode = nodes.find((node) => node.id === source)
+      const targetNode = nodes.find((node) => node.id === target)
+      if (sourceNode && targetNode) {
+        // these types should be fixed
+        const sourceData = sourceNode.data as NodeData
+        const targetData = targetNode.data as NodeData
+
+        const outputHandle = sourceData.outputs.find(
+          (ouput) => ouput.id === sourceHandle
+        )
+        const inputHandle = targetData.inputs.find(
+          (input) => input.id === targetHandle
+        )
+        if (outputHandle?.kind === inputHandle?.kind) {
+          const edge = { ...connection, type: 'common' }
+          setEdges((eds) => addEdge(edge, eds))
+        }
+      }
     },
-    [setEdges]
+    [nodes, setEdges]
   )
 
   const onDragOver: DragEventHandler<HTMLDivElement> = useCallback((event) => {
@@ -80,7 +98,7 @@ function FlowCanvas() {
         duration: 0
       }
 
-      const newNode: Node = {
+      const newNode: NodeType = {
         id: `${type}-${createId()}`,
         type: 'common',
         position,
@@ -105,6 +123,9 @@ function FlowCanvas() {
       onConnect={onConnect}
       onDragOver={onDragOver}
       onDrop={onDrop}
+      proOptions={{
+        hideAttribution: true
+      }}
       fitView
     >
       <Controls />

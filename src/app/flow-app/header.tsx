@@ -23,15 +23,15 @@ function Header() {
     })
   }, [nodes, edges, updateNodeData])
 
-  const handleRun = useCallback(() => {
+  const onRun = useCallback(() => {
     executorRef.current?.run()
   }, [])
 
-  const handlePause = useCallback(() => {
+  const onPause = useCallback(() => {
     executorRef.current?.pause()
   }, [])
 
-  const handleResume = useCallback(() => {
+  const onResume = useCallback(() => {
     executorRef.current?.resume()
   }, [])
 
@@ -42,7 +42,7 @@ function Header() {
         variant='outline'
         color='success'
         aria-label='Run'
-        onClick={handleRun}
+        onClick={onRun}
       >
         <Play size={16} weight='fill' color='#56d794' />
       </Button>
@@ -51,7 +51,7 @@ function Header() {
         variant='outline'
         color='danger'
         aria-label='Run'
-        onClick={handlePause}
+        onClick={onPause}
       >
         <Pause size={16} weight='fill' color='#d11e11' />
       </Button>
@@ -60,7 +60,7 @@ function Header() {
         variant='outline'
         color='success'
         aria-label='Run'
-        onClick={handleResume}
+        onClick={onResume}
       >
         <Play size={16} weight='fill' color='#56d794' />
       </Button>

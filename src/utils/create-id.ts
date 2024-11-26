@@ -1,5 +1,3 @@
 import { nanoid } from 'nanoid'
 
-export const createId = () => {
-  return nanoid()
-}
+export const createId = () => nanoid()

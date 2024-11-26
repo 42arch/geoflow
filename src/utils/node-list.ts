@@ -1,11 +1,16 @@
+import geojsonFile from '@/functions/geojson-file'
+import math, {
+  MATH_OPERATION_OPTIONS,
+  MATH_OPERATION_VALUE
+} from '@/functions/math'
+import simplify from '@/functions/simplify'
 import { NodeData } from '@/types'
-import { simplify } from '@turf/turf'
 
 export const NODE_LIST: NodeData[] = [
   {
     type: 'geojson-file',
     hasEffect: true,
-    func: (v: any) => [v],
+    func: geojsonFile,
     inputs: [
       {
         id: 'file-input',
@@ -18,17 +23,23 @@ export const NODE_LIST: NodeData[] = [
     ],
     outputs: [
       {
-        id: 'geojson-output',
+        id: '',
         hasHandle: true,
         kind: 'geojson',
         value: null
+      },
+      {
+        id: '',
+        hasHandle: true,
+        kind: 'text',
+        value: ''
       }
     ]
   },
   {
     type: 'simplify',
     hasEffect: true,
-    func: (...args: any) => [simplify(args[0], { tolerance: args[1] })],
+    func: simplify,
     inputs: [
       {
         id: 'simplify-input',
@@ -69,7 +80,7 @@ export const NODE_LIST: NodeData[] = [
     func: (v: number) => [v],
     inputs: [
       {
-        id: 'number-number-input',
+        id: '',
         hasHandle: true,
         label: 'num',
         kind: 'number',
@@ -78,7 +89,65 @@ export const NODE_LIST: NodeData[] = [
     ],
     outputs: [
       {
-        id: 'number-number-outout',
+        id: '',
+        hasHandle: true,
+        kind: 'number',
+        value: 0
+      }
+    ]
+  },
+  {
+    type: 'text',
+    hasEffect: true,
+    func: (v: string) => [v],
+    inputs: [
+      {
+        id: '',
+        hasHandle: true,
+        kind: 'text',
+        value: ''
+      }
+    ],
+    outputs: [
+      {
+        id: '',
+        hasHandle: true,
+        kind: 'text',
+        value: ''
+      }
+    ]
+  },
+  {
+    type: 'math',
+    hasEffect: true,
+    func: math,
+    inputs: [
+      {
+        id: '',
+        hasHandle: true,
+        label: 'Number A',
+        kind: 'number',
+        value: 0
+      },
+      {
+        id: '',
+        hasHandle: false,
+        label: 'Operation',
+        kind: 'select',
+        options: MATH_OPERATION_OPTIONS,
+        value: MATH_OPERATION_VALUE
+      },
+      {
+        id: '',
+        hasHandle: true,
+        label: 'Number B',
+        kind: 'number',
+        value: 0
+      }
+    ],
+    outputs: [
+      {
+        id: '',
         hasHandle: true,
         kind: 'number',
         value: 0
@@ -128,35 +197,6 @@ export const NODE_LIST: NodeData[] = [
     outputs: [
       {
         id: 'long-time-add-number-outout',
-        hasHandle: true,
-        kind: 'number',
-        value: 0
-      }
-    ]
-  },
-  {
-    type: 'add-number',
-    hasEffect: true,
-    func: (v1: number, v2: number) => [v1 + v2],
-    inputs: [
-      {
-        id: 'add-number-input-1',
-        hasHandle: true,
-        label: 'input 1',
-        kind: 'number',
-        value: 0
-      },
-      {
-        id: 'add-number-input-2',
-        hasHandle: true,
-        label: 'input 2',
-        kind: 'number',
-        value: 0
-      }
-    ],
-    outputs: [
-      {
-        id: 'add-number-output',
         hasHandle: true,
         kind: 'number',
         value: 0

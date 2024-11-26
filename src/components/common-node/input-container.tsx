@@ -1,7 +1,7 @@
 import { Input, InputKind } from '@/types'
 import CustomHandle from './custom-handle'
 import NumberInput from '../inputs/number-input'
-import SelectInput from '../inputs/SelectInput'
+import SelectInput from '../inputs/select-input'
 import GeoJSONFileInput from '../inputs/geojson-file-input'
 import GeoJSONInput from '../inputs/geojson-input'
 import BooleanInput from '../inputs/boolean-input'
@@ -13,6 +13,7 @@ import {
   useReactFlow
 } from '@xyflow/react'
 import { useEffect } from 'react'
+import TextInput from '../inputs/text-input'
 
 type Props = Input & {
   onChange: (v: string | number) => void
@@ -20,6 +21,7 @@ type Props = Input & {
 
 const InputComponents: Record<InputKind, React.ComponentType<any>> = {
   number: NumberInput,
+  text: TextInput,
   boolean: BooleanInput,
   select: SelectInput,
   geojson: GeoJSONInput,
@@ -81,9 +83,9 @@ export function InputContainer(props: Props) {
   return (
     <>
       {!hasHandle ? (
-        <InputWrapper {...props} disabled={disabled} className='px-2' />
+        <InputWrapper {...props} disabled={disabled} className='px-3' />
       ) : (
-        <CustomHandle id={props.id!} type='target'>
+        <CustomHandle id={props.id!} type='target' kind={props.kind}>
           <InputWrapper {...props} disabled={disabled} />
         </CustomHandle>
       )}

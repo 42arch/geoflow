@@ -15,7 +15,7 @@ function CommonNode(props: NodeProps<CommonNode>) {
 
   const { updateNodeData } = useReactFlow()
 
-  const handleValueChange = (inputId: string, v: string | number) => {
+  const onValueChange = (inputId: string, v: string | number) => {
     const newInputs = inputs.map((i) => {
       if (i.id === inputId) {
         return {
@@ -44,7 +44,7 @@ function CommonNode(props: NodeProps<CommonNode>) {
                 {...input}
                 onChange={(v) => {
                   if (input.id) {
-                    handleValueChange(input.id, v)
+                    onValueChange(input.id, v)
                   }
                 }}
               />

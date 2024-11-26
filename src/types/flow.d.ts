@@ -19,6 +19,11 @@ export interface NumberInput extends InputBase {
   step?: number
 }
 
+export interface TextInput extends InputBase {
+  readonly kind: 'text'
+  value: string
+}
+
 export interface BooleanInput extends InputBase {
   readonly kind: 'boolean'
   value: boolean
@@ -47,6 +52,7 @@ export type SelectOption = {
 
 export type Input =
   | NumberInput
+  | TextInput
   | BooleanInput
   | SelectInput
   | GeojsonFileInput
@@ -71,6 +77,11 @@ export interface NumberOutput extends OutputBase {
   value: number
 }
 
+export interface TextOutput extends OutputBase {
+  readonly kind: 'text'
+  value: string
+}
+
 export interface GeojsonOutput extends OutputBase {
   readonly kind: 'geojson'
   value: FeatureCollection | null
@@ -81,7 +92,11 @@ export interface GeojsonViewerOutput extends OutputBase {
   value: FeatureCollection | null
 }
 
-export type Output = NumberOutput | GeojsonOutput | GeojsonViewerOutput
+export type Output =
+  | NumberOutput
+  | TextOutput
+  | GeojsonOutput
+  | GeojsonViewerOutput
 export type OutputKind = Output['kind']
 
 export type NodeState = {
@@ -89,10 +104,12 @@ export type NodeState = {
   duration: number
 }
 
+export type NodeFunction = (...args: any[]) => any[] | Promise<any[]>
+
 export type NodeData = {
   type: string
   hasEffect: boolean
-  func: (...args: any[]) => void
+  func: NodeFunction
   inputs: Input[]
   outputs: Output[]
   _state?: NodeState
@@ -100,5 +117,5 @@ export type NodeData = {
 
 export type HandleType = 'input' | 'output'
 
-export type NodeType = Node<NodeData>
+export type NodeType = Node<NodeData, 'common'>
 export type EdgeType = Edge

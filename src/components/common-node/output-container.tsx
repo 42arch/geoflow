@@ -9,6 +9,7 @@ const OutputComponents: Record<
   React.ComponentType<{ value: any }>
 > = {
   number: GenericOutput,
+  text: GenericOutput,
   geojson: GeoJSONOutput,
   'geojson-viewer': GeoJSONViewerOutput
 }
@@ -19,7 +20,7 @@ export function OutputContainer({ id, hasHandle, value, kind }: Output) {
   return (
     <>
       {hasHandle ? (
-        <CustomHandle id={id} type='source'>
+        <CustomHandle id={id} type='source' kind={kind}>
           <OutputComp value={value} />
         </CustomHandle>
       ) : (

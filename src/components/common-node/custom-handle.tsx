@@ -1,16 +1,21 @@
 import { PropsWithChildren } from 'react'
 import { Handle, HandleType, Position } from '@xyflow/react'
+import { getHandleColor } from '@/utils/theme'
+import { InputKind, OutputKind } from '@/types'
 
 interface CustomHandleProps {
   id: string
+  kind: InputKind | OutputKind
   type: HandleType
 }
 
 function CustomHandle({
   id,
   type,
+  kind,
   children
 }: PropsWithChildren<CustomHandleProps>) {
+  const color = getHandleColor(kind)
   return (
     <div className='relative w-full'>
       <Handle
@@ -18,10 +23,10 @@ function CustomHandle({
         position={type === 'source' ? Position.Right : Position.Left}
         id={id}
         style={{
-          backgroundColor: '#a83a3a'
+          backgroundColor: color
         }}
       />
-      <div className='px-2'>{children}</div>
+      <div className='px-3'>{children}</div>
     </div>
   )
 }

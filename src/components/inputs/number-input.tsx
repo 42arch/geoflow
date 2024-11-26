@@ -10,7 +10,7 @@ interface NumberInputProps {
   onChange: (v: number) => void
 }
 
-export default function NumberInput({
+function NumberInput({
   value,
   disabled,
   minValue = 0,
@@ -48,3 +48,5 @@ export default function NumberInput({
     </NumberField>
   )
 }
+
+export default NumberInput
