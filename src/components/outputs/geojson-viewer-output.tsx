@@ -1,8 +1,25 @@
 import { useEffect } from 'react'
-import { LineLayerSpecification } from 'mapbox-gl'
+import {
+  CircleLayerSpecification,
+  FillLayerSpecification,
+  LineLayerSpecification
+} from 'mapbox-gl'
 import Map, { Layer, Source, useMap } from 'react-map-gl'
 import { bbox } from '@turf/turf'
 import { FeatureCollection } from 'geojson'
+
+const pointStyle: CircleLayerSpecification = {
+  id: 'point',
+  source: 'geojson-source',
+  type: 'circle',
+  filter: ['==', '$type', 'Point'],
+  paint: {
+    'circle-color': '#0059ff',
+    'circle-radius': 5,
+    'circle-stroke-width': 2,
+    'circle-stroke-color': '#ffffff'
+  }
+}
 
 const lineStyle: LineLayerSpecification = {
   id: 'line',
@@ -10,8 +27,21 @@ const lineStyle: LineLayerSpecification = {
   type: 'line',
   filter: ['==', '$type', 'LineString'],
   paint: {
-    'line-width': 4,
+    'line-width': 3,
     'line-color': '#0059ff'
+  }
+}
+
+const polygonStyle: FillLayerSpecification = {
+  id: 'polygon',
+  source: 'geojson-source',
+  type: 'fill',
+  filter: ['==', '$type', 'Polygon'],
+  paint: {
+    'fill-antialias': true,
+    'fill-color': '#0059ff',
+    'fill-opacity': 0.7,
+    'fill-outline-color': '#ffffff'
   }
 }
 
@@ -36,6 +66,8 @@ function GeoJsonLayer({ value }: Props) {
   return (
     <Source id='geojson-source' type='geojson' data={value}>
       <Layer {...lineStyle} />
+      <Layer {...pointStyle} />
+      <Layer {...polygonStyle} />
     </Source>
   )
 }
