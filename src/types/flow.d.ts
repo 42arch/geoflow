@@ -1,6 +1,8 @@
 import { Node, Edge } from '@xyflow/react'
 import { FeatureCollection } from 'geojson'
 
+export type DataArray = Record<string, string | number>[]
+
 interface InputBase {
   id?: string
   readonly hasHandle: boolean
@@ -87,6 +89,11 @@ export interface GeojsonOutput extends OutputBase {
   value: FeatureCollection | null
 }
 
+export interface TableOutput extends OutputBase {
+  readonly kind: 'table'
+  value: DataArray
+}
+
 export interface GeojsonViewerOutput extends OutputBase {
   readonly kind: 'geojson-viewer'
   value: FeatureCollection | null
@@ -97,6 +104,8 @@ export type Output =
   | TextOutput
   | GeojsonOutput
   | GeojsonViewerOutput
+  | TableOutput
+
 export type OutputKind = Output['kind']
 
 export type NodeState = {

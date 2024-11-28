@@ -3,6 +3,7 @@ import CustomHandle from './custom-handle'
 import GenericOutput from '../outputs/generic-output'
 import GeoJSONOutput from '../outputs/geojson-output'
 import GeoJSONViewerOutput from '../outputs/geojson-viewer-output'
+import TableOutput from '../outputs/table-output'
 
 const OutputComponents: Record<
   OutputKind,
@@ -11,7 +12,8 @@ const OutputComponents: Record<
   number: GenericOutput,
   text: GenericOutput,
   geojson: GeoJSONOutput,
-  'geojson-viewer': GeoJSONViewerOutput
+  'geojson-viewer': GeoJSONViewerOutput,
+  table: TableOutput
 }
 
 export function OutputContainer({ id, hasHandle, value, kind }: Output) {

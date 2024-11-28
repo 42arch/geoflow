@@ -1,5 +1,6 @@
 import buffer, { UNIT_OPTIONS, UNIT_VALUE } from '@/functions/buffer'
 import geojsonFile from '@/functions/geojson-file'
+import geojsonToTable from '@/functions/geojson-to-table'
 import math, {
   MATH_OPERATION_OPTIONS,
   MATH_OPERATION_VALUE
@@ -269,6 +270,27 @@ export const NODE_LIST: NodeData[] = [
         hasHandle: true,
         kind: 'number',
         value: 0
+      }
+    ]
+  },
+  {
+    type: 'geojson-to-table',
+    hasEffect: true,
+    func: geojsonToTable,
+    inputs: [
+      {
+        id: '',
+        hasHandle: true,
+        kind: 'geojson',
+        value: null
+      }
+    ],
+    outputs: [
+      {
+        id: '',
+        hasHandle: false,
+        kind: 'table',
+        value: []
       }
     ]
   },
