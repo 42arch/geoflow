@@ -5,6 +5,7 @@ import SelectInput from '../inputs/select-input'
 import GeoJSONFileInput from '../inputs/geojson-file-input'
 import GeoJSONInput from '../inputs/geojson-input'
 import BooleanInput from '../inputs/boolean-input'
+import TextInput from '../inputs/text-input'
 import { cn } from '@/utils/cn'
 import {
   useHandleConnections,
@@ -13,7 +14,6 @@ import {
   useReactFlow
 } from '@xyflow/react'
 import { useEffect } from 'react'
-import TextInput from '../inputs/text-input'
 
 type Props = Input & {
   onChange: (v: string | number) => void

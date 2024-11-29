@@ -6,6 +6,9 @@ import OutputContainer from './output-container'
 import InputContainer from './input-container'
 import { Separator } from '../ui/separator'
 import NodeMenu from './node-menu'
+import { useFlowApp } from '@/store'
+import { useCallback } from 'react'
+import { debounce } from 'lodash-es'
 
 export type CommonNode = Node<NodeData, 'common'>
 
@@ -13,24 +16,36 @@ function CommonNode(props: NodeProps<CommonNode>) {
   const { id, data } = props
   const { inputs, outputs, _state } = data
 
+  const { executor } = useFlowApp()
   const { updateNodeData } = useReactFlow()
 
-  const onValueChange = (inputId: string, v: string | number) => {
-    const newInputs = inputs.map((i) => {
-      if (i.id === inputId) {
-        return {
-          ...i,
-          value: v
+  const onValueChange = useCallback(
+    (inputId: string, v: string | number) => {
+      const newInputs = inputs.map((i) => {
+        if (i.id === inputId) {
+          return {
+            ...i,
+            value: v
+          }
+        } else {
+          return i
         }
-      } else {
-        return i
-      }
-    })
-    updateNodeData(id, {
-      inputs: newInputs,
-      outputs: outputs
-    })
-  }
+      })
+      updateNodeData(id, {
+        inputs: newInputs,
+        outputs: outputs
+      })
+      // Important: Run the executor after a delay.
+      // Why?: Ensure that all auto-run nodes execute automatically whenever any input is triggered.
+      // todo: add autoRun parameter.
+      const debRun = debounce(() => {
+        executor?.run()
+      }, 800)
+
+      debRun()
+    },
+    [executor, id, inputs, outputs, updateNodeData]
+  )
 
   return (
     <NodeMenu {...props}>

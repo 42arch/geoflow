@@ -1,39 +1,40 @@
 import { Pause, Play } from '@phosphor-icons/react'
 import { useEdges, useNodes, useReactFlow } from '@xyflow/react'
-import { useCallback, useEffect, useRef } from 'react'
+import { useCallback, useEffect } from 'react'
 import { EdgeType, NodeType } from '@/types'
 import { Executor } from '@/core/executor'
 import { Button } from '@/components/ui/button'
+import { useFlowApp } from '@/store'
 
 function Header() {
   const { updateNodeData } = useReactFlow()
   const nodes = useNodes<NodeType>()
   const edges = useEdges<EdgeType>()
-  const executorRef = useRef<Executor>()
+  const { executor, setExecutor } = useFlowApp()
 
   useEffect(() => {
-    if (!executorRef.current) {
-      executorRef.current = new Executor(nodes, edges)
+    if (!executor) {
+      setExecutor(new Executor(nodes, edges))
     } else {
-      executorRef.current.update(nodes, edges)
+      executor.update(nodes, edges)
     }
-    executorRef.current.watch((data) => {
-      // console.log('watch', data.status, data.node.id)
+
+    executor?.watch((data) => {
       updateNodeData(data.node.id, data.node.data)
     })
-  }, [nodes, edges, updateNodeData])
+  }, [nodes, edges, executor, setExecutor, updateNodeData])
 
   const onRun = useCallback(() => {
-    executorRef.current?.run()
-  }, [])
+    executor?.run()
+  }, [executor])
 
   const onPause = useCallback(() => {
-    executorRef.current?.pause()
-  }, [])
+    executor?.pause()
+  }, [executor])
 
   const onResume = useCallback(() => {
-    executorRef.current?.resume()
-  }, [])
+    executor?.resume()
+  }, [executor])
 
   return (
     <div className='flex items-center gap-3'>
