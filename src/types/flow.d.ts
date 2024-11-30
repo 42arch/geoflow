@@ -47,6 +47,11 @@ export interface GeojsonInput extends InputBase {
   value: FeatureCollection | null
 }
 
+export interface TableInput extends InputBase {
+  readonly kind: 'table'
+  value: DataArray
+}
+
 export type SelectOption = {
   value: string
   label: string
@@ -59,6 +64,7 @@ export type Input =
   | SelectInput
   | GeojsonFileInput
   | GeojsonInput
+  | TableInput
 
 export type InputKind = Input['kind']
 
@@ -117,7 +123,7 @@ export type NodeFunction = (...args: any[]) => any[] | Promise<any[]>
 
 export type NodeData = {
   type: string
-  hasEffect: boolean
+  autoRun: boolean
   func: NodeFunction
   inputs: Input[]
   outputs: Output[]

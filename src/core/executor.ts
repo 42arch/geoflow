@@ -36,12 +36,20 @@ export class Executor {
     }
   }
 
+  public async autoRun() {
+    // this.pendingAllNodes()
+    const startNodes = this.getStartNodes()
+    for (const node of startNodes) {
+      await this.handleNode(node, true)
+    }
+  }
+
   public update(nodes: NodeType[], edges: EdgeType[]) {
     this.nodes = nodes
     this.edges = edges
   }
 
-  private async handleNode(node: NodeType) {
+  private async handleNode(node: NodeType, isAutoRun?: boolean) {
     // if the status of executor is paused, push this node to the paused queue, and then do nothing.
     if (this.status === 'paused') {
       if (!this.pausedQueue.some((n) => n.id === node.id)) {
@@ -49,31 +57,12 @@ export class Executor {
       }
       return
     }
-
     const currentNode = node
 
-    // const prevNodes = getIncomers(currentNode, this.nodes, this.edges)
-    // if (prevNodes.some((n) => n.data.isPending)) {
-    //   const handlePrevNodesComplete = async () => {
-    //     if (!prevNodes.some((n) => n.data.isPending)) {
-    //       await this.executeNode(currentNode)
-    //     }
-    //   }
-
-    //   for (let prevNode of prevNodes) {
-    //     this.eventEmitter.on(
-    //       `nodeComplete:${prevNode.id}`,
-    //       handlePrevNodesComplete
-    //     )
-    //   }
-
-    //   return
-    // }
-
-    await this.executeNode(currentNode)
+    await this.executeNode(currentNode, isAutoRun)
   }
 
-  private async executeNode(node: NodeType) {
+  private async executeNode(node: NodeType, isAutoRun?: boolean) {
     if (this.status === 'paused') {
       if (!this.pausedQueue.some((n) => n.id === node.id)) {
         this.pausedQueue.push(node)
@@ -83,14 +72,32 @@ export class Executor {
 
     const { inputs, outputs, func } = node.data
     const inputValues = inputs.map((i) => i.value)
+    const newNode = cloneDeep(node)
+
+    if (isAutoRun && newNode.data.autoRun === false) {
+      newNode.data = {
+        ...node.data,
+        _state: {
+          isPending: false,
+          duration: 0
+        }
+      }
+
+      // update node
+      this.callback?.({
+        status: this.status,
+        node: newNode
+      })
+      return
+    }
 
     try {
       // const result = await func(...inputValues)
+
       const result = (await this.asyncFunc(
         func,
         inputValues
       )) as unknown as any[]
-      const newNode = cloneDeep(node)
 
       const newOutputs = outputs.map((output, idx) => {
         return {
@@ -124,7 +131,7 @@ export class Executor {
       const nextNodes = getOutgoers(newNode, this.nodes, this.edges)
       for (const nextNode of nextNodes) {
         this.updateNodeInputs(nextNode)
-        await this.handleNode(nextNode)
+        await this.handleNode(nextNode, isAutoRun)
       }
     } catch (error) {
       console.error('Error executing node:', error)
@@ -165,8 +172,6 @@ export class Executor {
     this.edges.forEach((edge) => {
       inDegree[edge.target]++
     })
-
-    // console.log('start', this.nodes, inDegree)
 
     return this.nodes.filter((node) => inDegree[node.id] === 0)
   }

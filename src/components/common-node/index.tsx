@@ -39,7 +39,7 @@ function CommonNode(props: NodeProps<CommonNode>) {
       // Why?: Ensure that all auto-run nodes execute automatically whenever any input is triggered.
       // todo: add autoRun parameter.
       const debRun = debounce(() => {
-        executor?.run()
+        executor?.autoRun()
       }, 800)
 
       debRun()

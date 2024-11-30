@@ -11,7 +11,7 @@ import { NodeData } from '@/types'
 export const NODE_LIST: NodeData[] = [
   {
     type: 'geojson-file',
-    hasEffect: true,
+    autoRun: true,
     func: geojsonFile,
     inputs: [
       {
@@ -40,7 +40,7 @@ export const NODE_LIST: NodeData[] = [
   },
   {
     type: 'simplify',
-    hasEffect: true,
+    autoRun: true,
     func: simplify,
     inputs: [
       {
@@ -78,7 +78,7 @@ export const NODE_LIST: NodeData[] = [
   },
   {
     type: 'buffer',
-    hasEffect: true,
+    autoRun: false,
     func: buffer,
     inputs: [
       {
@@ -124,7 +124,7 @@ export const NODE_LIST: NodeData[] = [
   },
   {
     type: 'number',
-    hasEffect: true,
+    autoRun: true,
     func: (v: number) => [v],
     inputs: [
       {
@@ -146,7 +146,7 @@ export const NODE_LIST: NodeData[] = [
   },
   {
     type: 'text',
-    hasEffect: true,
+    autoRun: true,
     func: (v: string) => [v],
     inputs: [
       {
@@ -167,7 +167,7 @@ export const NODE_LIST: NodeData[] = [
   },
   {
     type: 'math',
-    hasEffect: true,
+    autoRun: true,
     func: math,
     inputs: [
       {
@@ -204,7 +204,7 @@ export const NODE_LIST: NodeData[] = [
   },
   {
     type: 'add-ten',
-    hasEffect: true,
+    autoRun: true,
     func: (v: number) => [v + 10],
     inputs: [
       {
@@ -226,7 +226,7 @@ export const NODE_LIST: NodeData[] = [
   },
   {
     type: 'long-time-add',
-    hasEffect: true,
+    autoRun: false,
     func: (v: number) =>
       new Promise((resolve) => {
         setTimeout(() => {
@@ -253,7 +253,7 @@ export const NODE_LIST: NodeData[] = [
   },
   {
     type: 'number-viewer',
-    hasEffect: true,
+    autoRun: true,
     func: (v: number) => [v],
     inputs: [
       {
@@ -275,7 +275,7 @@ export const NODE_LIST: NodeData[] = [
   },
   {
     type: 'geojson-to-table',
-    hasEffect: true,
+    autoRun: true,
     func: geojsonToTable,
     inputs: [
       {
@@ -296,7 +296,7 @@ export const NODE_LIST: NodeData[] = [
   },
   {
     type: 'geojson-viewer',
-    hasEffect: true,
+    autoRun: true,
     func: (v: object) => [v],
     inputs: [
       {
