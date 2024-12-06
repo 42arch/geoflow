@@ -1,12 +1,14 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
+import { Resizable } from 're-resizable'
 import {
   CircleLayerSpecification,
   FillLayerSpecification,
   LineLayerSpecification
 } from 'mapbox-gl'
-import Map, { Layer, Source, useMap } from 'react-map-gl'
+import Map, { Layer, MapRef, Source, useMap } from 'react-map-gl'
 import { bbox } from '@turf/turf'
 import { FeatureCollection } from 'geojson'
+import { ArrowsOutSimple } from '@phosphor-icons/react'
 
 const pointStyle: CircleLayerSpecification = {
   id: 'point',
@@ -73,9 +75,35 @@ function GeoJsonLayer({ value }: Props) {
 }
 
 export default function GeoJSONViewerOutput({ value }: Props) {
+  const mapRef = useRef<MapRef>(null!)
+
   return (
-    <div className='h-[200px] w-full p-1'>
+    <Resizable
+      defaultSize={{
+        width: '300px',
+        height: '200px'
+      }}
+      minHeight={100}
+      minWidth={208}
+      enable={{
+        top: false,
+        right: false,
+        bottom: false,
+        left: false,
+        topRight: false,
+        bottomLeft: false,
+        topLeft: false,
+        bottomRight: true
+      }}
+      handleComponent={{
+        bottomRight: <ArrowsOutSimple className='rotate-90' />
+      }}
+      onResize={() => {
+        mapRef.current?.resize()
+      }}
+    >
       <Map
+        ref={mapRef}
         mapboxAccessToken='pk.eyJ1IjoiaW5nZW40MiIsImEiOiJjazlsMnliMXoyMWoxM2tudm1hajRmaHZ6In0.rWx_wAz2cAeMIzxQQfPDPA'
         initialViewState={{
           longitude: 0,
@@ -87,6 +115,6 @@ export default function GeoJSONViewerOutput({ value }: Props) {
       >
         <GeoJsonLayer value={value} />
       </Map>
-    </div>
+    </Resizable>
   )
 }
