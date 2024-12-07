@@ -1,14 +1,29 @@
-import { useEffect, useRef } from 'react'
+import {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState
+} from 'react'
 import { Resizable } from 're-resizable'
 import {
   CircleLayerSpecification,
   FillLayerSpecification,
   LineLayerSpecification
 } from 'mapbox-gl'
-import Map, { Layer, MapRef, Source, useMap } from 'react-map-gl'
+import Map, { Layer, MapProps, MapRef, Source, useMap } from 'react-map-gl'
 import { bbox } from '@turf/turf'
 import { FeatureCollection } from 'geojson'
-import { ArrowsOutSimple } from '@phosphor-icons/react'
+import { ArrowsOutSimple, ArrowsOut } from '@phosphor-icons/react'
+import { cn } from '@/utils/cn'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger
+} from '../ui/dialog'
+import * as VisuallyHidden from '@radix-ui/react-visually-hidden'
 
 const pointStyle: CircleLayerSpecification = {
   id: 'point',
@@ -74,47 +89,83 @@ function GeoJsonLayer({ value }: Props) {
   )
 }
 
+const MapContainer = forwardRef<MapRef, Props>(({ value }, ref) => {
+  return (
+    <Map
+      ref={ref}
+      mapboxAccessToken='pk.eyJ1IjoiaW5nZW40MiIsImEiOiJjazlsMnliMXoyMWoxM2tudm1hajRmaHZ6In0.rWx_wAz2cAeMIzxQQfPDPA'
+      initialViewState={{
+        longitude: 0,
+        latitude: 0,
+        zoom: 1
+      }}
+      attributionControl={false}
+      mapStyle='mapbox://styles/mapbox/streets-v9'
+      style={{
+        width: '100%',
+        height: '100%'
+      }}
+    >
+      <GeoJsonLayer value={value} />
+    </Map>
+  )
+})
+
 export default function GeoJSONViewerOutput({ value }: Props) {
   const mapRef = useRef<MapRef>(null!)
 
   return (
-    <Resizable
-      defaultSize={{
-        width: '300px',
-        height: '200px'
-      }}
-      minHeight={100}
-      minWidth={208}
-      enable={{
-        top: false,
-        right: false,
-        bottom: false,
-        left: false,
-        topRight: false,
-        bottomLeft: false,
-        topLeft: false,
-        bottomRight: true
-      }}
-      handleComponent={{
-        bottomRight: <ArrowsOutSimple className='rotate-90' />
-      }}
-      onResize={() => {
-        mapRef.current?.resize()
-      }}
-    >
-      <Map
-        ref={mapRef}
-        mapboxAccessToken='pk.eyJ1IjoiaW5nZW40MiIsImEiOiJjazlsMnliMXoyMWoxM2tudm1hajRmaHZ6In0.rWx_wAz2cAeMIzxQQfPDPA'
-        initialViewState={{
-          longitude: 0,
-          latitude: 0,
-          zoom: 1
+    <>
+      <Resizable
+        defaultSize={{
+          width: '300px',
+          height: '200px'
         }}
-        attributionControl={false}
-        mapStyle='mapbox://styles/mapbox/streets-v9'
+        minHeight={100}
+        minWidth={208}
+        enable={{
+          top: false,
+          right: false,
+          bottom: false,
+          left: false,
+          topRight: false,
+          bottomLeft: false,
+          topLeft: false,
+          bottomRight: true
+        }}
+        handleComponent={{
+          bottomRight: <ArrowsOutSimple className='rotate-90' />
+        }}
+        onResize={() => {
+          mapRef.current?.resize()
+        }}
       >
-        <GeoJsonLayer value={value} />
-      </Map>
-    </Resizable>
+        <div className='h-full w-full'>
+          <Dialog
+            onOpenChange={(open) => {
+              console.log('open', open)
+              mapRef.current?.resize()
+            }}
+          >
+            <DialogTrigger asChild>
+              <ArrowsOut
+                className='absolute right-0 top-0 z-10 cursor-pointer'
+                // onClick={() => {
+                //   setIsExpanded((v) => !v)
+                // }}
+              />
+            </DialogTrigger>
+            <DialogContent className='h-screen min-w-full p-1'>
+              <VisuallyHidden.Root>
+                <DialogTitle>map</DialogTitle>
+              </VisuallyHidden.Root>
+              <MapContainer ref={mapRef} value={value} />
+            </DialogContent>
+          </Dialog>
+
+          <MapContainer ref={mapRef} value={value} />
+        </div>
+      </Resizable>
+    </>
   )
 }
