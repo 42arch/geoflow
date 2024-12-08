@@ -17,6 +17,7 @@
     "@radix-ui/react-separator": "^1.1.0",
     "@radix-ui/react-slot": "^1.1.0",
     "@radix-ui/react-switch": "^1.1.1",
+    "@radix-ui/react-visually-hidden": "^1.1.0",
     "@turf/turf": "^7.1.0",
     "@vercel/analytics": "^1.2.0",
     "@xyflow/react": "12.3.5",
