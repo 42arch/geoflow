@@ -21,6 +21,21 @@ export interface NumberInput extends InputBase {
   step?: number
 }
 
+export interface NumberArrayInput extends InputBase {
+  readonly kind: 'number-array'
+  // length: number
+  value: number[]
+  options: {
+    minValue: number
+    maxValue: number
+    step: number
+  }[]
+  // value: number[]
+  // minValue?: number
+  // maxValue?: number
+  // step?: number
+}
+
 export interface TextInput extends InputBase {
   readonly kind: 'text'
   value: string
@@ -54,6 +69,7 @@ export type SelectOption = {
 
 export type Input =
   | NumberInput
+  | NumberArrayInput
   | TextInput
   | BooleanInput
   | SelectInput

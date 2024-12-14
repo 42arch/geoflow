@@ -1,28 +1,15 @@
-import {
-  forwardRef,
-  useEffect,
-  useImperativeHandle,
-  useRef,
-  useState
-} from 'react'
+import { forwardRef, useEffect, useRef } from 'react'
 import { Resizable } from 're-resizable'
 import {
   CircleLayerSpecification,
   FillLayerSpecification,
   LineLayerSpecification
 } from 'mapbox-gl'
-import Map, { Layer, MapProps, MapRef, Source, useMap } from 'react-map-gl'
+import Map, { Layer, MapRef, Source, useMap } from 'react-map-gl'
 import { bbox } from '@turf/turf'
 import { FeatureCollection } from 'geojson'
 import { ArrowsOutSimple, ArrowsOut } from '@phosphor-icons/react'
-import { cn } from '@/utils/cn'
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger
-} from '../ui/dialog'
+import { Dialog, DialogContent, DialogTitle, DialogTrigger } from '../ui/dialog'
 import * as VisuallyHidden from '@radix-ui/react-visually-hidden'
 
 const pointStyle: CircleLayerSpecification = {
@@ -67,6 +54,8 @@ interface Props {
 }
 
 function GeoJsonLayer({ value }: Props) {
+  console.log('xxxxxx', value)
+
   const { current: map } = useMap()
   useEffect(() => {
     if (value) {
@@ -148,12 +137,7 @@ export default function GeoJSONViewerOutput({ value }: Props) {
             }}
           >
             <DialogTrigger asChild>
-              <ArrowsOut
-                className='absolute right-0 top-0 z-10 cursor-pointer'
-                // onClick={() => {
-                //   setIsExpanded((v) => !v)
-                // }}
-              />
+              <ArrowsOut className='absolute right-0 top-0 z-10 cursor-pointer' />
             </DialogTrigger>
             <DialogContent className='h-screen min-w-full p-1'>
               <VisuallyHidden.Root>

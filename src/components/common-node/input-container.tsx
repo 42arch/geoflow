@@ -14,6 +14,7 @@ import {
 } from '@xyflow/react'
 import { useEffect } from 'react'
 import TextInput from '../inputs/text-input'
+import NumberArrayInput from '../inputs/number-array-input'
 
 type Props = Input & {
   onChange: (v: string | number) => void
@@ -25,7 +26,8 @@ const InputComponents: Record<InputKind, React.ComponentType<any>> = {
   boolean: BooleanInput,
   select: SelectInput,
   geojson: GeoJSONInput,
-  'geojson-file': GeoJSONFileInput
+  'geojson-file': GeoJSONFileInput,
+  'number-array': NumberArrayInput
 }
 
 export function InputWrapper(

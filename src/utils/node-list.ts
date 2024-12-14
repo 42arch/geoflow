@@ -5,6 +5,9 @@ import math, {
   MATH_OPERATION_OPTIONS,
   MATH_OPERATION_VALUE
 } from '@/functions/math'
+import randomLine from '@/functions/random-line'
+import randomPoint from '@/functions/random-point'
+import randomPolygon from '@/functions/random-polygon'
 import simplify from '@/functions/simplify'
 import { NodeData } from '@/types'
 
@@ -35,6 +38,218 @@ export const NODE_LIST: NodeData[] = [
         hasHandle: true,
         kind: 'text',
         value: ''
+      }
+    ]
+  },
+  {
+    type: 'random point',
+    hasEffect: true,
+    func: randomPoint,
+    inputs: [
+      {
+        id: '',
+        hasHandle: true,
+        label: 'Count',
+        kind: 'number',
+        step: 1,
+        minValue: 0,
+        maxValue: 1000,
+        value: 25
+      },
+      {
+        id: '',
+        hasHandle: false,
+        label: 'BBox',
+        kind: 'number-array',
+        value: [-180, -90, 180, 90],
+        options: [
+          {
+            step: 1,
+            minValue: -180,
+            maxValue: 180
+          },
+          {
+            step: 1,
+            minValue: -90,
+            maxValue: 90
+          },
+          {
+            step: 1,
+            minValue: -180,
+            maxValue: 180
+          },
+          {
+            step: 1,
+            minValue: -90,
+            maxValue: 90
+          }
+        ]
+      }
+    ],
+    outputs: [
+      {
+        id: 'geojson-output',
+        hasHandle: true,
+        kind: 'geojson',
+        value: null
+      }
+    ]
+  },
+  {
+    type: 'random line',
+    hasEffect: true,
+    func: randomLine,
+    inputs: [
+      {
+        id: '',
+        hasHandle: true,
+        label: 'Count',
+        kind: 'number',
+        step: 1,
+        minValue: 0,
+        maxValue: 1000,
+        value: 1
+      },
+      {
+        id: '',
+        hasHandle: false,
+        label: 'BBox',
+        kind: 'number-array',
+        value: [-180, -90, 180, 90],
+        options: [
+          {
+            step: 1,
+            minValue: -180,
+            maxValue: 180
+          },
+          {
+            step: 1,
+            minValue: -90,
+            maxValue: 90
+          },
+          {
+            step: 1,
+            minValue: -180,
+            maxValue: 180
+          },
+          {
+            step: 1,
+            minValue: -90,
+            maxValue: 90
+          }
+        ]
+      },
+      {
+        id: '',
+        hasHandle: true,
+        label: 'Vertices Number',
+        kind: 'number',
+        step: 1,
+        minValue: 2,
+        maxValue: 200,
+        value: 10
+      },
+      {
+        id: '',
+        hasHandle: true,
+        label: 'Max Length',
+        kind: 'number',
+        step: 0.001,
+        minValue: 0,
+        maxValue: 10,
+        value: 1
+      },
+      {
+        id: '',
+        hasHandle: true,
+        label: 'Max Rotation',
+        kind: 'number',
+        step: 0.01,
+        minValue: 0,
+        maxValue: Math.PI,
+        value: Math.PI / 8
+      }
+    ],
+    outputs: [
+      {
+        id: 'geojson-output',
+        hasHandle: true,
+        kind: 'geojson',
+        value: null
+      }
+    ]
+  },
+  {
+    type: 'random polygon',
+    hasEffect: true,
+    func: randomPolygon,
+    inputs: [
+      {
+        id: '',
+        hasHandle: true,
+        label: 'Count',
+        kind: 'number',
+        step: 1,
+        minValue: 0,
+        maxValue: 1000,
+        value: 1
+      },
+      {
+        id: '',
+        hasHandle: false,
+        label: 'BBox',
+        kind: 'number-array',
+        value: [-180, -90, 180, 90],
+        options: [
+          {
+            step: 1,
+            minValue: -180,
+            maxValue: 180
+          },
+          {
+            step: 1,
+            minValue: -90,
+            maxValue: 90
+          },
+          {
+            step: 1,
+            minValue: -180,
+            maxValue: 180
+          },
+          {
+            step: 1,
+            minValue: -90,
+            maxValue: 90
+          }
+        ]
+      },
+      {
+        id: '',
+        hasHandle: true,
+        label: 'Vertices Number',
+        kind: 'number',
+        step: 1,
+        minValue: 3,
+        maxValue: 100,
+        value: 10
+      },
+      {
+        id: '',
+        hasHandle: true,
+        label: 'Max Radial Length',
+        kind: 'number',
+        step: 1,
+        minValue: 0,
+        maxValue: 90,
+        value: 10
+      }
+    ],
+    outputs: [
+      {
+        id: 'geojson-output',
+        hasHandle: true,
+        kind: 'geojson',
+        value: null
       }
     ]
   },
